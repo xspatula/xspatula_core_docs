@@ -1,0 +1,156 @@
+main_navigation:
+  - title: Content
+    children:
+      - title: "Framework"
+        url: /framework/
+      - title: "Setup DB"
+        url: /setup_db/
+      - title: "Setup processes"
+        url: /setup_processes/
+      - title: "Add user data"
+        url: /user_data/
+      - title: "Audit"
+        url: /auditing/
+      - title: "Community"
+        url: /setup_community/
+      - title: "Building"
+        url: /building/
+      - title: "About"
+        url: ../about/
+
+framework:
+  - title: Xspatula framework
+    children:
+      - title: "Synopsis"
+        url: /framework/
+      - title: "notebook"
+        url: /framework/notebook/
+      - title: "Scheme file"
+        url: /framework/scheme_file/
+      - title: "Job file"
+        url: /framework/job_file/
+      - title: "Pilot file"
+        url: /framework/pilot_file/
+      - title: "Process file"
+        url: /framework/process_file/
+      - title: "VScode"
+        url: /framework/vscode/
+
+setup_db:
+  - title: Setup DB
+    children:
+      - title: "Synopsis"
+        url: /setup_db/
+      - title: "PostgreSQL"
+        url: /setup_db/postgres/
+      - title: "Anaconda"
+        url: /setup_db/anaconda/
+      - title: ".netrc"
+        url: /setup_db/netrc/
+      - title: "Defining schemas & tables"
+        url: /setup_db/schemas_tables/
+      - title: "Defining default users"
+        url: /setup_db/schemas_tables/#table-insert
+      - title: "Bootstrapping process management"
+        url: /setup_db/manage_process/
+
+setup_processes:
+  - title: "Setup processes"
+    children:
+      - title: "Synopsis"
+        url: /setup_processes/
+      - title: "Scheme file"
+        url: /setup_processes/scheme_file
+      - title: "Define process"
+        url: /setup_processes/define_process
+      - title: "Edit process"
+        url: /setup_processes/edit_process
+      - title: "Process options"
+        url: /setup_processes/process_options
+
+add_user_data:
+  - title: "Add user data"
+    children:
+      - title: "Synopsis"
+        url: /user_data/
+      - title: "Translate excel"
+        url: /user_data/translate_excel
+      - title: "Insert data"
+        url: /user_data/insert_data
+      - title: "Single-step insert"
+        url: /user_data/single_step_insert
+
+auditing:
+  - title: "Auditing"
+    children:
+      - title: "Introduction"
+        url: /auditing/
+      - title: "Setup"
+        url: /auditing/setup
+      - title: "Queries"
+        url: /auditing/queries
+
+setup_community:
+  - title: "Setup Community"
+    children:
+      - title: "Introduction"
+        url: /setup_community/
+      - title: "Bootstrap user"
+        url: /setup_community/bootstrap_user
+      - title: "SMTP email"
+        url: /setup_community/smtp_email
+      - title: "Excel intake"
+        url: /setup_community/excel_intake
+      - title: "Register notebook"
+        url: /setup_community/register_notebook
+      - title: "Welcome email"
+        url: /setup_community/welcome_email
+
+building:
+  - title: "Building"
+    children:
+      - title: "Project"
+        url: /building/
+      - title: "Notebooks"
+        url: /building/notebooks
+      - title: "Database"
+        url: /building/database
+      - title: "Auditing"
+        url: /building/auditing
+      - title: "Initial user"
+        url: /building/initial_user
+      - title: "Pg_users"
+        url: /building/pg_users
+      - title: "SMTP"
+        url: /building/smtp
+      - title: "Add users"
+        url: /building/add_users
+      - title: "Processes"
+        url: /building/processes
+      - title: "Postgres"
+        url: /building/postgres
+
+main:
+  - title: "Xspatula framework"
+    url: /framework/
+    description: "Structure and function of the Xspatula framework"
+  - title: "Setup DB"
+    url: /setup_db/
+    description: "Setting up a postgreSQL database with Xspatula framework"
+  - title: "Setup processes"
+    url: /setup_processes/
+    description: "Setting up processes in the Xspatula postgreSQL database"
+  - title: "Add user data"
+    url: /user_data/
+    description: "Add user data to the Xspatula postgreSQL database"
+  - title: "Audit"
+    url: /auditing/
+    description: "Track every change made to the Xspatula postgreSQL database"
+  - title: "Community"
+    url: /setup_community/
+    description: "Register organisations and users via Excel intake"
+  - title: "Building"
+    url: /building/
+    description: "Build a new Xspatula project from scratch"
+  - title: "About"
+    url: ../about/
