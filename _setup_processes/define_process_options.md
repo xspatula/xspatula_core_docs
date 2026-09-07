@@ -83,7 +83,7 @@ Numerical parameters can in a similar manner be confined to only accept values w
       "process": "add_process",
       "overwrite": false,
       "parameters": {
-        "root_process": "compostion",
+        "root_process": "composition",
         "process": "add_reference_components",
         "min_user_stratum": 5,
         "title": "Add reference composition",
@@ -139,7 +139,7 @@ A parameter can be given a `default_value` that is used whenever `required` is s
       "process": "add_process",
       "overwrite": false,
       "parameters": {
-        "root_process": "compostion",
+        "root_process": "composition",
         "process": "add_reference_components",
         "min_user_stratum": 5,
         "title": "Add reference composition",
