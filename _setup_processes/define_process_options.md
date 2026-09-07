@@ -128,6 +128,59 @@ Numerical parameters can in a similar manner be confined to only accept values w
 }
 ```
 
+## Default value
+
+A parameter can be given a `default_value` that is used whenever `required` is set to `true` and the user does not enter a custom value for the parameter. Instead of forcing the user to always type a value, the process falls back to whatever is set in `default_value`.
+
+```json
+{
+  "process": [
+    {
+      "process": "add_process",
+      "overwrite": false,
+      "parameters": {
+        "root_process": "compostion",
+        "process": "add_reference_components",
+        "min_user_stratum": 5,
+        "title": "Add reference composition",
+        "label": "Insert, update or delete a reference composition."
+      },
+      "nodes": [
+        {
+          "parent": "process",
+          "element": "parameters",
+          "parameter": [
+            {
+              "parameter": "unit",
+              "parameter_type": "text",
+              "required": true,
+              "default_value": "percent",
+              "hint": "Unit used for expressing the reference fraction",
+              "schema_table": {
+                "schema": "stuff",
+                "table": "standard_reference",
+                "write": true
+              },
+              "permission": {
+                "update": true,
+                "delete": false
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+In this example, if the user omits the `unit` parameter, the process still succeeds because `required` is `true` and `default_value` supplies `"percent"` automatically.
+
+There are two special cases for `default_value`: setting it to `auto` or to `inherit`. These are only valid when the process also defines the associated `auto_name` or `inherit` object for that same parameter.
+
+- `default_value: "auto"` triggers automatic naming via the `auto_name` block, as described in [Automatic naming](#automatic-naming) below.
+- `default_value: "inherit"` triggers inheriting a value from an existing database record via the `inherit` block, as described in [Inherit](#inherit) next.
+
 ## Inherit
 
 When defining a process you can set a parameter to be inherited from an existing record in another table. For example when defining a contact person for a particular sub task you can set the parameter to by default inherit the contact name for the main task. This is done in an `inherit` block:
