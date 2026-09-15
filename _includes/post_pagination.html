@@ -1,0 +1,39 @@
+{% comment %}
+  Overrides the theme's post_pagination.html. Jekyll's built-in page.previous/
+  page.next only walk a single collection in its default (alphabetical, since
+  none of our pages set `date`) order — that doesn't match the intended
+  reading order, which crosses collections (framework → setup_db →
+  setup_processes → user_data → auditing → setup_community → building).
+  Instead, walk the flat order in _data/story_order.yml. A page not listed
+  there (e.g. a future page someone forgets to add) silently gets no
+  previous/next, rather than a wrong one.
+{% endcomment %}
+{% assign story = site.data.story_order %}
+{% assign current_index = -1 %}
+{% for url in story %}
+  {% if url == page.url %}
+    {% assign current_index = forloop.index0 %}
+  {% endif %}
+{% endfor %}
+
+{% if current_index >= 0 %}
+  {% assign story_size = story | size %}
+  {% assign prev_index = current_index | minus: 1 %}
+  {% assign next_index = current_index | plus: 1 %}
+  <nav class="pagination">
+    {% if prev_index >= 0 %}
+      {% assign prev_url = story[prev_index] %}
+      {% assign prev_doc = site.documents | where: "url", prev_url | first %}
+      <a href="{{ prev_url | relative_url }}" class="pagination--pager"{% if prev_doc %} title="{{ prev_doc.title | markdownify | strip_html | strip }}"{% endif %}>{{ site.data.ui-text[site.locale].pagination_previous | default: "Previous" }}</a>
+    {% else %}
+      <a href="#" class="pagination--pager disabled">{{ site.data.ui-text[site.locale].pagination_previous | default: "Previous" }}</a>
+    {% endif %}
+    {% if next_index < story_size %}
+      {% assign next_url = story[next_index] %}
+      {% assign next_doc = site.documents | where: "url", next_url | first %}
+      <a href="{{ next_url | relative_url }}" class="pagination--pager"{% if next_doc %} title="{{ next_doc.title | markdownify | strip_html | strip }}"{% endif %}>{{ site.data.ui-text[site.locale].pagination_next | default: "Next" }}</a>
+    {% else %}
+      <a href="#" class="pagination--pager disabled">{{ site.data.ui-text[site.locale].pagination_next | default: "Next" }}</a>
+    {% endif %}
+  </nav>
+{% endif %}

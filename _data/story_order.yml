@@ -1,0 +1,57 @@
+# Flat reading order for the custom previous/next pagination in
+# _includes/post_pagination.html. This follows the collection order already
+# used in _data/navigation.yml (framework, setup_db, setup_processes,
+# user_data, auditing, setup_community, building), and within each
+# collection the same order as that collection's sidebar nav — not Jekyll's
+# default per-collection (alphabetical) order. Add new pages here in their
+# intended reading position; a page missing from this list simply gets no
+# previous/next links rather than a broken one.
+
+- /framework/
+- /framework/notebook/
+- /framework/scheme_file/
+- /framework/job_file/
+- /framework/pilot_file/
+- /framework/process_file/
+- /framework/vscode/
+
+- /setup_db/
+- /setup_db/postgres/
+- /setup_db/anaconda/
+- /setup_db/netrc/
+- /setup_db/schemas_tables/
+- /setup_db/foreign_key/
+- /setup_db/manage_process/
+
+- /setup_processes/
+- /setup_processes/scheme_file/
+- /setup_processes/define_process/
+- /setup_processes/edit_process/
+- /setup_processes/process_options/
+
+- /user_data/
+- /user_data/translate_excel/
+- /user_data/insert_data/
+- /user_data/single_step_insert/
+
+- /auditing/
+- /auditing/setup/
+- /auditing/queries/
+
+- /setup_community/
+- /setup_community/bootstrap_user/
+- /setup_community/smtp_email/
+- /setup_community/excel_intake/
+- /setup_community/register_notebook/
+- /setup_community/welcome_email/
+
+- /building/
+- /building/notebooks/
+- /building/database/
+- /building/auditing/
+- /building/initial_user/
+- /building/pg_users/
+- /building/smtp/
+- /building/add_users/
+- /building/processes/
+- /building/postgres/

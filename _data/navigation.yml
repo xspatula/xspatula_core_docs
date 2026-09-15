@@ -53,6 +53,10 @@ setup_db:
         url: /setup_db/schemas_tables/#table-insert
       - title: "Bootstrapping process management"
         url: /setup_db/manage_process/
+  - title: Reference
+    children:
+      - title: "Foreign key"
+        url: /setup_db/foreign_key/
 
 setup_processes:
   - title: "Setup processes"
