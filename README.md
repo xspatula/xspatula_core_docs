@@ -20,9 +20,9 @@ The framework uses **PostgreSQL** as its backbone. Every result, parameter set, 
 
 ---
 
-## The Python package: `setup_core_db`
+## The Python package: `xspatula_core`
 
-The sibling repository [xspatula/setup_core_db](https://github.com/xspatula/setup_core_db) contains the framework source and the Jupyter notebooks used to drive it.
+The sibling repository [xspatula/xspatula_core](https://github.com/xspatula/xspatula_core) contains the framework source and the Jupyter notebooks used to drive it.
 
 ### Key components
 
@@ -53,7 +53,7 @@ The framework generates `.env` files for eight built-in PostgreSQL user categori
 |---|---|
 | `community_admin` | Manage users and organisations |
 | `login_evaluation` | Validate login attempts (minimal rights) |
-| `user_cat_0` – `user_cat_5` | Data access, from most restricted (0) to most permissive (5) |
+| `user_cat_1` – `user_cat_5` | Data access, from most restricted (0) to most permissive (5) |
 
 Credentials can be stored in a `.netrc` file rather than in plain text in the scheme file.
 
@@ -113,5 +113,5 @@ xspatula_core_docs/
 
 ## Licenses
 
-- **Code**: [MIT License](https://github.com/xspatula/setup_core_db/blob/main/LICENSE)
+- **Code**: [MIT License](https://github.com/xspatula/xspatula_core/blob/main/LICENSE)
 - **Data**: [Creative Commons Attribution (CC-BY)](https://creativecommons.org/licenses/by/4.0/)

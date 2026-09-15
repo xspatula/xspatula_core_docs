@@ -17,7 +17,7 @@ Registering processes for your new project — the JSON registration in [Adding 
 Open a terminal window and navigate to your local copy of the framework — the directory containing the `setup/` folder. If you're using an Anaconda environment, activate it first:
 
 ```bash
-cd /path/to/setup_core_db
+cd /path/to/xspatula_core
 conda activate <your-environment-name>
 ```
 
@@ -52,7 +52,7 @@ You can also pass the password directly as a command-line argument (`python3 set
 
 ## Step 4: paste the hash into your seed file
 
-Open your project's copy of the user-seed file — for the shipped example this is `setup/zzz/xspatula/setup_db/json_core/community/user_records_v10_sql.json`; for your own project it's the equivalent file under your own `json_<project>/community/` — and paste the hash in as the `password` value for your first user:
+Open your project's copy of the user-seed file — for the shipped example this is `setup/zzz/xspatula/setup_db/json/community/user_records_v10_sql.json`; for your own project it's the equivalent file under your own `json/community/` — and paste the hash in as the `password` value for your first user:
 
 ```json
 "password": "$2b$12$KIXQ7z3nJ8mR5vT1wYbP9uL6oE2cN4sD0hG7fA3xZ8qW1yV6tR9mS"

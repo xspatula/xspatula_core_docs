@@ -78,7 +78,7 @@ utility/territory_v10_sql.json  # run only this one
 
 | File | Purpose |
 |---|---|
-| `xspatula_setup_processes.txt` | Pilot file; comment out lines to run only the process files that need updating |
+| `setup_processes.txt` | Pilot file; comment out lines to run only the process files that need updating |
 | `root_processes_v10_sql.json` | Root process definitions — set `overwrite` or `delete` here to modify root groups |
 | `translate_tabular_data_v10_sql.json` | `translate_tabular_data` process definition |
 | `territory_v10_sql.json` | `manage_territory` process definition |

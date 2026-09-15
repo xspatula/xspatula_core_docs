@@ -57,7 +57,7 @@ Defining a schema is simple, you just create a process file, or edit the default
 
 To create a table is more complicated and requires properly structured Standard Query Language (SQL) syntax. The syntax is not evaluated by the framework but is executed as it is given by the user. If there are errors in the syntax the script will crash with a rudimentary feedback on the error.
 
-Framework default process for _create_table_, example schema.table community.user, command objects ending with '_id' or '_code' denote foreign keys from other tables; the hashtag comments are added as explanations and should not be included in production files.
+Framework default process for _create_table_, example schema.table community.user, command objects ending with `_id` or `_code` denote foreign keys from other tables; the hashtag comments are added as explanations and should not be included in production files.
 
 The example below includes the optional `audit` object defining what actions from this table should be automatically recorded with the built-in [auditing][auditing].
 ```
@@ -203,8 +203,8 @@ The options for setting `process_parameter_set_value`, `process_parameter_minmax
 The handling of processes is fairly complex. If you are in for a deeper understanding please have a look in the JSON process files setting up and inserting the data for defining processes:
 
 ```
-./setup/zzz/xspatula/setup_db/json_core/process/processes_v10_sql.json
-./setup/zzz/xspatula/setup_db/json_core/process/processes_records_v10_sql.json
+./setup/zzz/xspatula/setup_db/json/process/processes_v10_sql.json
+./setup/zzz/xspatula/setup_db/json/process/processes_records_v10_sql.json
 ```
 
 For the full column-level reference of every `process` schema table, and how each maps to a registration option, see the [process schema tables][define_process_tables] reference in Setup processes. For how `processes_records_v10_sql.json` itself bootstraps `add_root_process`/`add_process` and the stratum levels required to use them, see [Bootstrapping process management][manage_process].
@@ -213,7 +213,7 @@ For the full column-level reference of every `process` schema table, and how eac
 
 | File | Purpose |
 |---|---|
-| `db_xspatula_core_setup.txt` | Pilot file; defines the execution order for all 10 process files below |
+| `db_setup.txt` | Pilot file; defines the execution order for all 10 process files below |
 | `schema_v10_sql.json` | Creates the three core schemas: `utility`, `community` and `process` |
 | `utility_territory_v10_sql.json` | Creates the `utility.territory` table for ISO country codes |
 | `community_user_categories_v10_sql.json` | Creates the `community.user_categories` table defining privilege strata |

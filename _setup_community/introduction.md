@@ -14,7 +14,7 @@ The Setup community collection of pages covers how to CRUD manage users of an xs
 
 ## Prerequisite
 
-`setup_db.ipynb` and `setup_processes.ipynb` must already have been run — including registering `manage_organisation` and `manage_user` the same way any process is registered (see [Define and register a process][setup_processes]; the two registration files for this collection's example are `setup/zzz/xspatula/setup_processes/json_xspatula/community/organisation_v10_sql.json` and `user_v10_sql.json`) — before anything in this collection works. The registration notebook covered here logs in as a real `community.user` to perform its inserts, so a working login (see [Bootstrap user][setup_community_bootstrap_user]) has to exist first.
+`setup_db.ipynb` and `setup_processes.ipynb` must already have been run — including registering `manage_organisation` and `manage_user` the same way any process is registered (see [Define and register a process][setup_processes]; the two registration files for this collection's example are `setup/zzz/xspatula/setup_processes/json/community/organisation_v10_sql.json` and `user_v10_sql.json`) — before anything in this collection works. The registration notebook covered here logs in as a real `community.user` to perform its inserts, so a working login (see [Bootstrap user][setup_community_bootstrap_user]) has to exist first.
 
 ## Pages in this collection
 

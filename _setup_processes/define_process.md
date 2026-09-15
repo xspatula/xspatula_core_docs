@@ -144,7 +144,7 @@ Everything described above is stored in nine tables in the `process` schema. You
 
 ## Adding the process file to the pilot file
 
-Once you have created the JSON process file, add it to the pilot file `xspatula_setup_processes.txt`:
+Once you have created the JSON process file, add it to the pilot file `setup_processes.txt`:
 
 ```
 # My new process group
@@ -173,7 +173,7 @@ The three JSON files included in the default setup illustrate the pattern descri
 
 | File | Purpose |
 |---|---|
-| `xspatula_setup_processes.txt` | Pilot file; lists the JSON process files to register, in execution order |
+| `setup_processes.txt` | Pilot file; lists the JSON process files to register, in execution order |
 | `root_processes_v10_sql.json` | Registers the `manage_table_data` and `translate_data` root process groups |
 | `translate_tabular_data_v10_sql.json` | Registers the `translate_tabular_data` sub-process for converting spreadsheet data to JSON |
 | `territory_v10_sql.json` | Registers the `manage_territory` sub-process for inserting and updating territory records |

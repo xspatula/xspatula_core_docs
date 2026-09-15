@@ -91,8 +91,8 @@ processes_records_v10_sql.json
 
 | File | Purpose |
 |---|---|
-| `db_xspatula_core_setup.txt` | Pilot file for database setup; lists the 10 JSON process files to run in order (schemas → tables → users → processes) |
-| `xspatula_setup_processes.txt` | Pilot file for process registration; lists the 3 JSON process files to run in order (root processes → translate → territory) |
+| `db_setup.txt` | Pilot file for database setup; lists the 10 JSON process files to run in order (schemas → tables → users → processes) |
+| `setup_processes.txt` | Pilot file for process registration; lists the 3 JSON process files to run in order (root processes → translate → territory) |
 
 [scheme_file]: ../scheme_file
 

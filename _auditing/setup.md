@@ -15,7 +15,7 @@ separate, optional step from creating the database at all.
 
 ## Declaring coverage on a table
 
-Every table's `create_table` definition (under `setup/zzz/xspatula/setup_db/json_core/...`) may
+Every table's `create_table` definition (under `setup/zzz/xspatula/setup_db/json/...`) may
 carry a sibling `"audit"` key:
 
 ```json
@@ -76,7 +76,7 @@ exist, cell 2 skips straight to applying the current trigger config.
 
 ## Config files: shipped vs. generated
 
-Everything lives under `setup/zzz/xspatula/setup_db/json_core/audit/`, but the files there fall
+Everything lives under `setup/zzz/xspatula/setup_db/json/audit/`, but the files there fall
 into two very different categories.
 
 **Shipped with the framework** — these 3 files come with xspatula itself and don't change per

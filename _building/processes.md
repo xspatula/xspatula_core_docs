@@ -93,7 +93,7 @@ This is exactly the mechanism already documented in [Define and register a proce
 }
 ```
 
-Place this under your own `setup/zzz/<project>/setup_processes/json_<project>/report/report_v10_sql.json`, add a line for it to your setup-processes pilot file (the root process must come before its sub-processes — within one JSON file, as above, that ordering is handled for you), and run `setup_processes.ipynb`. This writes rows into the database's `process` and `root_process` tables — nothing runs yet, it's purely registration.
+Place this under your own `setup/zzz/<project>/setup_processes/json/report/report_v10_sql.json`, add a line for it to your setup-processes pilot file (the root process must come before its sub-processes — within one JSON file, as above, that ordering is handled for you), and run `setup_processes.ipynb`. This writes rows into the database's `process` and `root_process` tables — nothing runs yet, it's purely registration.
 
 ### Updating a process
 

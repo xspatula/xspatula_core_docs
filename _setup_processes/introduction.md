@@ -34,8 +34,8 @@ The same four-level hierarchy used for database setup applies here:
 └── xspatula/
     ├── job_setup_processes.json     # job file — points to job folder, sub-folder and pilot file
     └── setup_processes/
-        ├── xspatula_setup_processes.txt   # pilot file — lists process JSON files to run
-        └── json_xspatula/                 # process sub-folder
+        ├── setup_processes.txt   # pilot file — lists process JSON files to run
+        └── json/                 # process sub-folder
             ├── root_process/
             │   └── root_processes_v10_sql.json
             ├── translate/
@@ -84,8 +84,8 @@ For details on defining your own processes, see [Define and register a process][
 | File | Purpose |
 |---|---|
 | `scheme_xspatula_local_use.json` | Scheme file for process registration; defines project path and a category-5 user login — no superuser credentials |
-| `job_setup_processes.json` | Job file; points to the `setup_processes` job folder, `json_xspatula` sub-folder and `xspatula_setup_processes.txt` pilot file |
-| `xspatula_setup_processes.txt` | Pilot file; lists the JSON process files to run in order |
+| `job_setup_processes.json` | Job file; points to the `setup_processes` job folder, `json` sub-folder and `setup_processes.txt` pilot file |
+| `setup_processes.txt` | Pilot file; lists the JSON process files to run in order |
 
 [setup_db]: ../../setup_db/
 

@@ -14,10 +14,10 @@ A real project needs its own schemas and tables beyond what the framework ships 
 
 ## Defining your own schemas and tables
 
-Follow exactly the pattern already documented in [Setup DB][setup_db] / [Defining schemas & tables][schemas_tables] — `create_schema` and `create_table` process files, run through `setup_db.ipynb`. The only thing that changes for your own project is where these files live: create your own tree mirroring the framework's own `setup/zzz/xspatula/setup_db/json_core/`:
+Follow exactly the pattern already documented in [Setup DB][setup_db] / [Defining schemas & tables][schemas_tables] — `create_schema` and `create_table` process files, run through `setup_db.ipynb`. The only thing that changes for your own project is where these files live: create your own tree mirroring the framework's own `setup/zzz/xspatula/setup_db/json/`:
 
 ```
-setup/zzz/<project>/setup_db/json_<project>/
+setup/zzz/<project>/setup_db/json/
 ├── schema/          # create_schema definitions
 ├── community/        # (if you extend the default community tables)
 ├── process/           # (if you extend the default process tables)

@@ -15,7 +15,7 @@ last_modified_at: 2026-08-15 08:00:00 +0200
 Registering a new user through [Excel intake][setup_community_excel_intake] and [Register notebook][setup_community_register_notebook] runs through a registered process, `manage_user` — and running any process requires an already-logged-in `community.user`. That's fine for the second user onwards, but the *first* user can't log in before they exist. Someone has to be seeded directly.
 
 That first-user seed still requires: hand-editing
-`setup/zzz/xspatula/setup_db/json_core/community/user_records_v10_sql.json` and running `setup_db.ipynb`.
+`setup/zzz/xspatula/setup_db/json/community/user_records_v10_sql.json` and running `setup_db.ipynb`.
 
 ## Passwords are bcrypt hashes now, not plaintext
 

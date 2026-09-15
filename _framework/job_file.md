@@ -64,7 +64,7 @@ The directory entered as the object job_folder must be directly under the projec
 
 | File | Purpose |
 |---|---|
-| `job_setup_db.json` | Job file for database setup; points to the `setup_db` job folder, `json_core` process sub-folder, and `db_xspatula_core_setup.txt` pilot file |
-| `job_setup_processes.json` | Job file for process registration; points to the `setup_processes` job folder, `json_xspatula` process sub-folder, and `xspatula_setup_processes.txt` pilot file |
+| `job_setup_db.json` | Job file for database setup; points to the `setup_db` job folder, `json` process sub-folder, and `db_setup.txt` pilot file |
+| `job_setup_processes.json` | Job file for process registration; points to the `setup_processes` job folder, `json` process sub-folder, and `setup_processes.txt` pilot file |
 
 [pilot_file]: ../pilot_file/
