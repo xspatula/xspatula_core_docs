@@ -10,7 +10,11 @@ date:   2026-03-15 16:13:03 +0200
 last_modified_at:   2026-03-29 21:15:03 +0200
 ---
 
-To manage the Xspatula framework database it comes with three Jupyter notebooks: setup_db, delete_db and setup_processes. Before you can run the notebooks you need to create a python environment. To test the core functionality, the only thing you need to edit in the framework itself are your credentials for the postgreSQL database cluster you have access to.
+To manage the Xspatula framework database it comes with three Jupyter notebooks: setup_db, delete_db and setup_processes. Before you can run the notebooks you need to create a python environment. To test the core functionality you need to:
+- edit your credentials for the postgreSQL database cluster you have access to,
+- define your own user,
+- generate a hach-crypted password with an included script, and
+- replace the default user with your own user in a couple of JSON files.
 
 ## Prerequisits
 
@@ -61,7 +65,7 @@ The second code block loads the [scheme][scheme_file] file, defining project pat
 scheme_file = './zzz/scheme_xspatula_local_setup.json'
 ```
 
-The default path for the _scheme_ file for setting up the database is in the (sleepy) directory zzz under the directory where the notebooks themselves are available. You can move the _scheme_ file to any other path you want, and either give a relative (vis-a-vis the notebook itself) or absolute path that you have access to.
+The default path for the _scheme_ file for setting up the database is in the (sleepy) directory `zzz` under the directory where the notebooks themselves are available. You can move the _scheme_ file to any other path you want, and either give a relative (vis-a-vis the notebook) or absolute path that you have access to.
 
 See the document on [scheme file][scheme_file] for more information.
 
