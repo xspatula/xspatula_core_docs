@@ -25,4 +25,4 @@ The Xspatula framework is provided under the following licenses:
 
 [framework]: ./framework
 
-[xspatula_github]: https://github.com/xspatula
+[xspatula_github]: https://github.com/xspatula/xspatula_core

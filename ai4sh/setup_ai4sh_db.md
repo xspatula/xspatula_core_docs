@@ -103,11 +103,6 @@ In the scheme file you can also add pg_users to include in the database when set
         "role": "login_evaluation"
       },
       {
-        "user_id": "user_cat_0",
-        "password": "tablecloth-summerleaf-riverbasin-vacuumcleaner",
-        "role": "user_cat_1"
-      },
-      {
         "user_id": "user_cat_1",
         "password": "secret-parsimony-archipelago-hedgehog",
         "role": "user_cat_1"

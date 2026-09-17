@@ -124,7 +124,6 @@ You can also add additional postgres users (pg_user in postgres jargon, which is
 
 - community_admin [for administrating users],
 - login_evaluation (user_cat_6) [for checking login credentials],
-- user_cat_0 [for users that can only SELECT limited tables],
 - user_cat_1,
 - user_cat_2,
 - user_cat_3,
@@ -156,11 +155,6 @@ The scheme file example below shows how to set up one pg_user per predefined pg_
         "user_id": "your_login_evaluation",
         "password": "second-difficult-password",
         "role": "login_evaluation"
-      },
-      {
-        "user_id": "your_user_cat_0",
-        "password": "third-difficult-password",
-        "role": "user_cat_1"
       },
       {
         "user_id": "your_user_cat_1",
