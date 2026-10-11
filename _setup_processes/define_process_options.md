@@ -7,7 +7,7 @@ excerpt: "Process parameters can be set to default values, defined to only accep
 permalink: /setup_processes/process_options/
 author_profile: false
 date: 2026-06-09
-last_modified_at: 2026-06-09
+last_modified_at: 2026-10-11
 ---
 
 The process setup_processes has additional options for facilitating the settings of parameter values when called, including accepting only a predefined set of values, restricting of numerical ranges, inherit values from existing database records or assigning automatic name values.
@@ -239,7 +239,7 @@ For the inherit function to kick in, the parameter must be set to its default va
 
 ## Automatic naming
 
-Parameters that are composed of other parameters in the same process definition can be set to automatic naming by adding an `autonaming` block. This is useful for creating human readable records when a foreign key (FK) is used for defining links to other tables.
+Parameters that are composed of other parameters in the same process definition can be set to automatic naming by adding an `auto_name` block. This is useful for creating human readable records when a foreign key (FK) is used for defining links to other tables.
 
 ```json
 {
@@ -287,7 +287,7 @@ Parameters that are composed of other parameters in the same process definition 
                 "delete": false
               },
               "auto_name": {
-                "concat": "'%s_%s_%s'  %(project_id__project_name, event_name, campaign_date)"
+                "concat": "'%s_%s_%s' %(project_id__project_tag, event_name, campaign_date)"
               }
             }
           ]
@@ -297,12 +297,17 @@ Parameters that are composed of other parameters in the same process definition 
   ]
 }
 ```
-For generating an automatic name, the parameter must be set to its default value (`auto`). As the parameter is not required (`required: false`), omitting the parameter from the JSON process will use automatic naming. Setting another value than `auto` overrides the automatic naming and the set value will be used.
+For generating an automatic name, the parameter must be set to its default value (`auto`). As the parameter is not required (`required: false`), omitting the parameter from the JSON process will use automatic naming. Setting another value than `auto` overrides the automatic naming and the set value will be used. The exception is a `name`, `alias` or `tag` that contains `_` or `@`: such a value is rejected unless it equals the automatic name (see [reserved separators][auto_naming_separators]).
 
-In addition, the parameters `project_id__project_name`, `event_name` and `campaign_date` must be other parameters defined for the same process.
+In addition, `event_name` and `campaign_date` must be other parameters defined for the same process. The argument `project_id__project_tag` is not a parameter itself: it returns the `tag` of the project record referenced by the process parameter `project_id__project_name`, which must be defined for the same process. Tags are the recommended input for `name` and `tag` concats, because `_` and `@` are reserved as separators and a free-text name may contain blanks.
 
 The actual automatic naming is defined by the string
 ```
-#%s_%s_%s#  %(project_id__project_name, event_name, campaign_date)
+'%s_%s_%s' %(project_id__project_tag, event_name, campaign_date)
 ```
-that is translated to python code when running the process.
+that is translated to python code when running the process. The format string must be enclosed in single quotes; an unquoted string stops the process with the error `can not parse concat`.
+
+For tags, reserved separators, lookups via name, tag or alias and a full worked example, see [Automatic naming and tags][auto_naming].
+
+[auto_naming]: ../auto_naming/
+[auto_naming_separators]: ../auto_naming/#reserved-separators

@@ -126,6 +126,8 @@ There are four additional blocks that can be used for [defining process options]
 - [inherit][define_process_options_inherit], copies value from existing database record
 - [auto naming][define_process_options_auto_naming], assigns an automatic value
 
+The tag-based naming, reserved separators and record lookups behind auto naming are described in [Automatic naming and tags][auto_naming].
+
 ## Process schema tables
 
 Everything described above is stored in nine tables in the `process` schema. You'll rarely query these directly — the notebook and JSON files do that for you — but knowing what each table holds helps when troubleshooting a registration:
@@ -184,4 +186,5 @@ The three JSON files included in the default setup illustrate the pattern descri
 [define_process_options_minmax]: ../process_options#minmax-ranges
 [define_process_options_inherit]: ../process_options#inherit
 [define_process_options_auto_naming]: ../process_options#automatic-naming
+[auto_naming]: ../auto_naming/
 [manage_process]: ../../setup_db/manage_process/

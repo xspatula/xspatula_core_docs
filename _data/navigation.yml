@@ -71,6 +71,8 @@ setup_processes:
         url: /setup_processes/edit_process
       - title: "Process options"
         url: /setup_processes/process_options
+      - title: "Automatic naming and tags"
+        url: /setup_processes/auto_naming
 
 add_user_data:
   - title: "Add user data"
