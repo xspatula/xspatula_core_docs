@@ -1,0 +1,48 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+search: false
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
+@import "minimal-mistakes"; // main partials
+
+/* ==========================================================================
+   Site overrides
+   ========================================================================== */
+
+/* Tables: the same look as a table inside a .notice block — smaller font so
+   wide tables fit, on a light background. Applied to every table in the page
+   content (.page__content on single pages, .archive on the home page), so
+   tables are written as plain Markdown. */
+.page__content table,
+.archive table {
+  font-size: $type-size-6 * 0.75;   // 0.5625em, as a table inside .notice
+  padding: 1em;
+  background-color: mix($background-color, $light-gray, $notice-background-mix);
+  border-radius: $border-radius;
+  box-shadow: 0 1px 1px rgba($light-gray, 0.25);
+
+  code {
+    background-color: mix($background-color, $light-gray, $code-notice-background-mix);
+  }
+}
+
+/* A table that is still wrapped in a .notice block keeps the theme size,
+   so it is not shrunk twice. */
+.page__content .notice table,
+.archive .notice table {
+  font-size: $type-size-6;
+  padding: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* Code blocks: fenced code blocks at the same font size as the tables above. Kept in monospace so indentation in JSON/paths lines up. */
+.page__content div.highlighter-rouge,
+.page__content figure.highlight,
+.archive div.highlighter-rouge,
+.archive figure.highlight {
+  font-size: $type-size-6 * 0.75;   // 0.5625em, as the tables
+}

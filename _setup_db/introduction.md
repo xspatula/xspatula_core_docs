@@ -330,9 +330,7 @@ Note that this is a different password to the ones in the postgres pg_user _sche
 
 The figure below illustrates the content and connections for the schema community after setting up the Xspatula framework.
 
-<figure>
-  <img src="{{ '/assets/media/xspatula_db_community_schema.png' | relative_url }}" alt="Schema community tables and connections">
-</figure>
+[![Schema community tables and connections]({{ "/assets/media/xspatula_db_community_schema.png" | relative_url }})]({{ "/assets/media/xspatula_db_community_schema.png" | relative_url }})
 
 #### Processes
 
@@ -352,9 +350,7 @@ For the full column-level reference of every `process` schema table, see the [pr
 
 The figure below illustrates the content and connections for the schema process after setting up the Xspatula framework.
 
-<figure>
-  <img src="{{ '/assets/media/xspatula_db_process_schema.png' | relative_url }}" alt="Schema process tables and connections">
-</figure>
+[![Schema process tables and connections]({{ "/assets/media/xspatula_db_process_schema.png" | relative_url }})]({{ "/assets/media/xspatula_db_process_schema.png" | relative_url }})
 
 #### Initial process records
 
