@@ -207,7 +207,7 @@ From `setup/zzz/lucas/setup_processes/json/observation/campaign_v10_sql.json` (s
               "parameter_type": "text",
               "required": false,
               "default_value": "auto",
-              "hint": "Unique tag used for auto naming production files and results, should be less than 16 chars and not contain at (@) or blank",
+              "hint": "Unique tag used for auto naming production files and results, auto = dataset tag + _ + datetime_tag. A tag given by hand must not contain underscore, at (@), capitals or blank.",
               "sketch": "schema_table and permission blocks omitted",
               "auto_name": {
                 "concat": "'%s_%s' %(dataset_id__dataset_tag, datetime_tag)"
