@@ -152,3 +152,7 @@ psql -d lucas -c "SELECT schemaname, relname, n_live_tup FROM pg_stat_user_table
 - New page `_setup_db/dump_restore.md` (`/setup_db/dump_restore/`), last in the setup_db sidebar (`_data/navigation.yml`) and in `_data/story_order.yml` after `manage_process`. Content from this note with core values (`db: xspatula`, `xspatula_py_3.12`, `xspatula_core.dump`), plus a section "Sharing a premade database" (sender: personal users/hashes travel with the dump; receiver: own PG version >= sender, own scheme file with `dump_path` and `db_users`, then restore and go to user data).
 - Cross-references: "Shortcut with a premade database" in `_setup_db/introduction.md` (Prerequisits), "Alternative: restore a premade database" in `_setup_db/schemas_tables.md` and `_setup_processes/introduction.md` (Prerequisites).
 - Verified against `xspatula_core/setup/src_setup/lib_setup/dump_restore_db.py` and `setup/dump_restore_db.ipynb`. Local build OK, new links and previous/next checked.
+
+## LUCAS licence caveat (2026-10-18)
+
+`_setup_db/dump_restore.md`: the "share a premade database" bullet now notes that sharing requires the data licence to allow it, and LUCAS does not. "Sharing a premade database" has a ⚠️ "Not for LUCAS" box citing the ESDAC LUCAS_SOIL licence (art. 3, 8), with links to the licence PDF and to the LUCAS docs section `xspatula_lucas_docs/lucas_2009/#lucas-license-the-data-may-not-be-shared`.

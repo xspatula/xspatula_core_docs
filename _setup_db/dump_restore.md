@@ -16,7 +16,7 @@ Use a dump to:
 
 - **back up** a database before an update, or after a long data import,
 - **move** a database to another machine,
-- **share a premade database**, so that the receiver can skip [defining schemas and tables][schemas_tables], [setting up processes][setup_processes] and importing data.
+- **share a premade database**, so that the receiver can skip [defining schemas and tables][schemas_tables], [setting up processes][setup_processes] and importing data. Only where the data licence allows it; for LUCAS it does [not](#sharing-a-premade-database).
 
 For the LUCAS database in the sibling project `xspatula_lucas`, setup and data import take hours; a restore takes minutes. The same module ships with `xspatula_core`, `xspatula_ai4sh` and `xspatula_lucas`, and nothing in it is project specific.
 
@@ -117,6 +117,10 @@ Dump again after every import or change. A restore is only as current as its dum
 
 To give someone a ready database instead of letting them run the whole setup:
 
+> ⚠️ **Not for LUCAS.** A database holding LUCAS soil data (`xspatula_lucas`) must **not** be shared outside your own organisation. The [LUCAS_SOIL licence agreement][lucas_license] is personal and non-transferable, with no sub-licence (art. 3), and access is limited to the licensee's organisation (art. 8). Every user must request the data from ESDAC and accept the licence themselves. Dump LUCAS for your own backup and restore only; see [LUCAS license][lucas_docs_license] in the LUCAS docs.
+
+Check the licence of every dataset in a database before sharing it.
+
 - **Sender:** dump the database and send the file. The dump holds every row, including the users in `community.user` with their e-mail addresses and password hashes. Remove or replace personal users before dumping a database you share outside your own group.
 - **Receiver:**
   - install PostgreSQL ([PostgreSQL][postgres]) with a version at least as new as the sender's, and the Python environment ([Anaconda][anaconda]);
@@ -202,3 +206,7 @@ psql -d xspatula -c "SELECT schemaname, relname, n_live_tup FROM pg_stat_user_ta
 [setup_processes]: ../../setup_processes/
 
 [user_data]: ../../user_data/
+
+[lucas_license]: https://esdac.jrc.ec.europa.eu/projects/LUCAS/Documents/LUCAS_SOIL_LIC_AGR_final_for_web.pdf
+
+[lucas_docs_license]: https://xspatula.github.io/xspatula_lucas_docs/lucas_2009/#lucas-license-the-data-may-not-be-shared
