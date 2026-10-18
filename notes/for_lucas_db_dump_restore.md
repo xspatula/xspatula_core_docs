@@ -156,3 +156,7 @@ psql -d lucas -c "SELECT schemaname, relname, n_live_tup FROM pg_stat_user_table
 ## LUCAS licence caveat (2026-10-18)
 
 `_setup_db/dump_restore.md`: the "share a premade database" bullet now notes that sharing requires the data licence to allow it, and LUCAS does not. "Sharing a premade database" has a ⚠️ "Not for LUCAS" box citing the ESDAC LUCAS_SOIL licence (art. 3, 8), with links to the licence PDF and to the LUCAS docs section `xspatula_lucas_docs/lucas_2009/#lucas-license-the-data-may-not-be-shared`.
+
+## AI4SH sharing caveat (2026-10-18)
+
+`_setup_db/dump_restore.md`: "share a premade database" bullet and a ⚠️ "AI4SH: partners only" box (no licence, not yet reviewed/verified, share only within AI4SoilHealth partners), linking to `xspatula_ai4sh_docs/all_data/#ai4sh-data-partners-only`.
