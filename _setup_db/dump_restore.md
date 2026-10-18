@@ -18,7 +18,7 @@ Use a dump to:
 - **move** a database to another machine,
 - **share a premade database**, so that the receiver can skip [defining schemas and tables][schemas_tables], [setting up processes][setup_processes] and importing data.
 
-For the LUCAS database in the sibling project `xspatula_lucas`, setup and data import take hours; a restore takes seconds (9.2 MB dump, 110 tables, restored in 1 s). The same module ships with `xspatula_core`, `xspatula_ai4sh` and `xspatula_lucas`, and nothing in it is project specific.
+For the LUCAS database in the sibling project `xspatula_lucas`, setup and data import take hours; a restore takes minutes. The same module ships with `xspatula_core`, `xspatula_ai4sh` and `xspatula_lucas`, and nothing in it is project specific.
 
 ## What a dump contains
 
