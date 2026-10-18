@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository. This repo is the new documentation for the sibling repo that used to be under the path `setup_core_db`, but I changed the path to `xspatula_core` (to reflect the more advanced code repos `xspatula_lucas` and `xspatula_ai4sh` and their documentation paths `xspatula_core_docs` and `xspatula_ai4sh_docs`). The initial building of this repo is in the file `.claude/CLAUDE_version1_20260902.md`, the second in `.claude/CLAUDE_version2_20260907.md`
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository. This repo is the new documentation for the sibling repo that used to be under the path `setup_core_db`, but I changed the path to `xspatula_core` (to reflect the more advanced code repos `xspatula_lucas` and `xspatula_ai4sh` and their documentation paths `xspatula_lucas_docs` and `xspatula_ai4sh_docs`). The initial building of this repo is in the file `.claude/TASK_version1_20260902.md`, the second in `.claude/TASK_version2_20260907.md`
 
 ## Project Purpose
 
