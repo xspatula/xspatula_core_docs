@@ -7,7 +7,7 @@ excerpt: "The insert_tabular_data process translates a spreadsheet and inserts t
 permalink: /user_data/single_step_insert/
 author_profile: false
 date: 2026-08-24
-last_modified_at: 2026-08-24
+last_modified_at: 2026-10-18
 ---
 
 The `insert_tabular_data` process does the same translation as `translate_tabular_data` — reading an Excel or CSV file and turning each row into a process command — but then immediately applies the result to the database, in the same step. There's no generated JSON file to hand off to a second, manually-run process: one notebook cell reads the spreadsheet and the records exist in the database.
@@ -120,6 +120,11 @@ ORDER BY name
 LIMIT 10;
 ```
 
+Two foreign key messages may show up in the log:
+
+- `❌ ERROR Can not find foreign key value <value> for <parameter>`: a value in a `xxx_id__yyy` column does not match any record, and that row is not inserted. Check the spelling, or insert the referenced record first. See [Foreign key][foreign_key].
+- An insert-only rerun is safe: existing rows are skipped, not duplicated, and the linked tables of an existing record (e.g. `dataset_setting_system`) are still filled in.
+
 ## Input files
 
 | File | Purpose |
@@ -136,3 +141,5 @@ LIMIT 10;
 [user_data]: ../
 
 [pilot_file]: ../../framework/pilot_file/
+
+[foreign_key]: ../../setup_db/foreign_key/

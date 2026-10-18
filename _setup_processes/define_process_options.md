@@ -299,7 +299,7 @@ Parameters that are composed of other parameters in the same process definition 
 ```
 For generating an automatic name, the parameter must be set to its default value (`auto`). As the parameter is not required (`required: false`), omitting the parameter from the JSON process will use automatic naming. Setting another value than `auto` overrides the automatic naming and the set value will be used. The exception is a `name`, `alias` or `tag` that contains `_` or `@`: such a value is rejected unless it equals the automatic name (see [reserved separators][auto_naming_separators]).
 
-In addition, `event_name` and `campaign_date` must be other parameters defined for the same process. The argument `project_id__project_tag` is not a parameter itself: it returns the `tag` of the project record referenced by the process parameter `project_id__project_name`, which must be defined for the same process. Tags are the recommended input for `name` and `tag` concats, because `_` and `@` are reserved as separators and a free-text name may contain blanks.
+In addition, `event_name` and `campaign_date` must be other parameters defined for the same process. The argument `project_id__project_tag` is not a parameter itself: it returns the `tag` of the project record referenced by the process parameter `project_id__project_name`, which must be defined for the same process. Tags are the recommended input for `name` and `tag` concats, because `_`, `@` and `#` are reserved as separators and a free-text name may contain blanks.
 
 The actual automatic naming is defined by the string
 ```
