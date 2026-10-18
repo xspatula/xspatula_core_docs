@@ -22,6 +22,7 @@
 - /setup_db/schemas_tables/
 - /setup_db/foreign_key/
 - /setup_db/manage_process/
+- /setup_db/dump_restore/
 
 - /setup_processes/
 - /setup_processes/scheme_file/

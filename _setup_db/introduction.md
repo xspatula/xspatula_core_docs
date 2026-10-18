@@ -7,7 +7,7 @@ excerpt: "The first step in building up an Xspatula framework is to setup a post
 permalink: /setup_db/
 author_profile: false
 date:   2026-03-15 16:13:03 +0200
-last_modified_at:   2026-03-29 20:45:30 +0200
+last_modified_at:   2026-10-18
 ---
 
 The first step in building up an Xspatula framework is to setup a postgreSQL database. You can also use Xspatula just for setting up a database without using the framework for something else.
@@ -20,6 +20,8 @@ To build your own postgreSQL database you might need to install the following ap
 - [postgreSQL][postgres] (unless you have access to a machine with postgres installed),
 - [Anaconda][anaconda] or any other application for defining virtual python environments, and/or
 - A [.netrc][netrc] file that defines your credentials for setting up new databases (to protect your login credentials).
+
+**Shortcut with a premade database.** If someone gives you a dump of an existing Xspatula database, you do not need to build it. Restore the dump with `setup/dump_restore_db.ipynb` and skip the schema, table and process setup. The same notebook backs up your own database. See [Dump and restore][dump_restore].
 
 ## Hidden files and security
 
@@ -443,6 +445,8 @@ The directory structure for the project defined in the scheme_file and the job_f
 [process_file]: ../framework/process_file/
 
 [schemas_tables]: ./schemas_tables/
+
+[dump_restore]: ./dump_restore/
 
 [auditing]: /auditing/
 

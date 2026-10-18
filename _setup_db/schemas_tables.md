@@ -7,10 +7,12 @@ excerpt: "In the Xspatula framework, schemas and tables are defined as part of t
 permalink: /setup_db/schemas_tables/
 author_profile: false
 date:   2026-03-15 16:13:03 +0200
-last_modified_at:   2026-03-29 21:43:13 +0200
+last_modified_at:   2026-10-18
 ---
 
 In the Xspatula framework, schemas and tables are defined as part of the database setup. As long as you do not set overwrite or delete to true, no data will be lost. But if you set overwrite to true, existing data in the table you overwrite will be lost. If you set delete to true the table is removed and all existing data lost.
+
+**Alternative: restore a premade database.** If you have a dump of an existing Xspatula database (your own backup, or one shared with you), restoring it creates all schemas, tables, records, processes and roles in one step, and this page can be skipped. See [Dump and restore][dump_restore]. Before you set `overwrite` or `delete` to true on a database with data, dump it first.
 
 ## Create schema
 
@@ -242,6 +244,8 @@ For the full column-level reference of every `process` schema table, and how eac
 [define_process_tables]: ../../setup_processes/define_process/#process-schema-tables
 
 [manage_process]: ../manage_process/
+
+[dump_restore]: ../dump_restore/
 
 [auditing]: ../../auditing/
 
