@@ -34,7 +34,7 @@ The repository includes a worked example in `project_example/` that imports nati
 
 ```
 project_example/
-├── scheme_xspatula.json            # scheme file — project path + user credentials
+├── scheme_xspatula.json            # scheme file — project path + user_netrc_id
 └── import_data/
     └── utility/
         ├── excel/
@@ -49,14 +49,13 @@ The single-step route adds a parallel `insert_process/` structure alongside this
 
 ## Scheme file
 
-The scheme file for the example project points to the `project_example` directory and uses an `ini_cat_5_user` login:
+The scheme file for the example project points to the `project_example` directory and logs in through a [.netrc][netrc] entry:
 
 ```json
 {
   "project_path": "../project_example",
   "user_project": {
-    "user_name": "ini_cat_5_user",
-    "password": "armchair-scouting-windowframe-bicycling"
+    "user_netrc_id": "my_initial_user"
   },
   "process": [
     {
@@ -69,18 +68,18 @@ The scheme file for the example project points to the `project_example` director
 }
 ```
 
-Replace `user_name` and `password` with your own credentials. You can also use `user_netrc_id` to read credentials from a [.netrc file][netrc].
+`my_initial_user` is the `.netrc` entry of the user created at setup (see [Setting up the initial user]({{ "/building/initial_user/" | relative_url }})). No password goes in the scheme file.
 
 ## Input files
 
 | File | Purpose |
 |---|---|
-| `scheme_xspatula.json` | Scheme file for the example project; defines the project path and `ini_cat_5_user` credentials |
+| `scheme_xspatula.json` | Scheme file for the example project; defines the project path and the user's `user_netrc_id` |
 
-[setup_db]: ../../setup_db/
+[setup_db]: ../setup_db/
 
-[setup_processes]: ../../setup_processes/
+[setup_processes]: ../setup_processes/
 
-[netrc]: ../../setup_db/netrc/
+[netrc]: ../setup_db/netrc/
 
-[single_step_insert]: ../single_step_insert/
+[single_step_insert]: ./single_step_insert/

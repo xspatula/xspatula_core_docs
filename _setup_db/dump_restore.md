@@ -7,7 +7,7 @@ excerpt: "Copy a complete Xspatula database to a single file and restore it agai
 permalink: /setup_db/dump_restore/
 author_profile: false
 date: 2026-10-18
-last_modified_at: 2026-10-18
+last_modified_at: 2026-11-08
 ---
 
 A complete Xspatula database can be written to a single dump file and restored from it. Think of the setup notebooks as the recipe and the dump as the finished, frozen dish: cooking from the recipe takes time, thawing takes minutes.
@@ -53,8 +53,7 @@ Use the same [scheme file][scheme_file] as for `setup_db.ipynb` (e.g. `setup/zzz
   "host": "localhost",
   "port": 5432,
   "db": "xspatula",
-  "user_name": "karttur",
-  "password": "...",
+  "host_netrc_id": "my_pg_superuser",
   "dump_path": "~/xspatula/db_dump/xspatula_core.dump",
   "db_users": [ ... ]
 }
@@ -63,10 +62,10 @@ Use the same [scheme file][scheme_file] as for `setup_db.ipynb` (e.g. `setup/zzz
 | Key | Required | Meaning |
 |---|---|---|
 | `db`, `host`, `port` | yes | Database to dump, or to restore into |
-| `host_netrc_id` **or** `user_name` + `password` | yes | Credentials, as for the database setup. Must be the database owner or superuser (the setup user) |
+| `host_netrc_id` | yes | `.netrc` entry with the credentials, as for the database setup (legacy `user_name` + `password` still works, not recommended). Must be the database owner or superuser (the setup user) |
 | `dump_path` | no | Dump file. **Default: `~/xspatula/db_dump/<db>.dump`** |
 | `pg_bin_path` | no | Folder with `pg_dump` and `pg_restore`, if they are not found automatically |
-| `db_users` | no | If present, the roles are created and granted after a restore, as in the database setup |
+| `db_users` | no | If present, the roles are created and granted after a restore, as in the database setup. Entries are `user_netrc_id` references, resolved from `.netrc` before anything is dropped; a missing entry aborts the restore with the database left as it was |
 
 Keep dumps **outside** the project folder. They are large and contain user data. Suggested paths:
 
@@ -79,6 +78,8 @@ Keep dumps **outside** the project folder. They are large and contain user data.
 Paths follow the standard rule: `~/` is the home directory, `/...` is absolute, and anything else is resolved against the project root (`project_path`). Write `~/xspatula/...`, not `~xspatula/...`; without the slash the path is read as relative to the project root.
 
 `pg_dump` and `pg_restore` are searched for in this order: `pg_bin_path` → `PATH` → `/opt/homebrew/opt/postgresql@*/bin` → `/usr/local/opt/postgresql@*/bin` → `/Applications/Postgres.app/Contents/Versions/latest/bin` → `/usr/lib/postgresql/*/bin`. The major version of `pg_dump` must be equal to or higher than that of the server.
+
+To use `psql`, `pg_dump` and `pg_restore` from a terminal with Homebrew's keg-only `postgresql@17`, add `export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"` to `~/.zshrc` (see [Securing authentication][postgres_hba]).
 
 ## Using the notebook
 
@@ -106,12 +107,31 @@ Dump again after every import or change. A restore is only as current as its dum
 
 ⚠️ **Destructive.** An existing database with the same name is replaced.
 
-1. If the database exists you are asked to confirm. It is then dropped with `DROP DATABASE ... WITH (FORCE)`, which also closes open connections from other notebooks (PostgreSQL 13 or later).
-2. An empty database is created.
-3. `pg_restore --no-owner --jobs=4` loads the dump. All objects become owned by the restoring user, so a dump from one machine restores on another with a different superuser name. Privileges are kept.
-4. If `db_users` is set in the scheme file, the per-role `.env` files in `src/postgres/environment/` are rewritten, and any role missing on this server is created and granted.
+1. If `db_users` is set in the scheme file, its entries are resolved from `.netrc` first. If one fails, the restore stops with `❌ ERROR - db_users not resolved - nothing dropped or restored`, and the existing database is left as it was.
+2. If the database exists you are asked to confirm. It is then dropped with `DROP DATABASE ... WITH (FORCE)`, which also closes open connections from other notebooks (PostgreSQL 13 or later).
+3. An empty database is created.
+4. `pg_restore --no-owner --jobs=4` loads the dump. All objects become owned by the restoring user, so a dump from one machine restores on another with a different superuser name. Privileges are kept.
+5. If `db_users` is set, the per-role `.env` files in `src/postgres/environment/` are rewritten and any role missing on this server is created and granted.
 
-`pg_restore` errors are printed but do not stop the restore. On a new server, expect `role ... does not exist` errors for the GRANTs; step 4 fixes them.
+`pg_restore` errors are printed but do not stop the restore. On a new server, expect `role ... does not exist` errors for the GRANTs; step 5 fixes them.
+
+**Tip:** check that your `.netrc` has an entry for every netrc id in the scheme before a real restore, especially on a new machine. Don't use the setup cell of `setup_db.ipynb` for this: if every entry resolves, it goes on and sets up the database. This read-only check prints only the ids, never a password (run from `setup/`, with your own scheme file):
+
+```bash
+python3 - zzz/scheme_local_setup.json <<'EOF'
+import json, netrc, sys
+s = json.load(open(sys.argv[1]))['postgresdb']
+ids = [s['host_netrc_id']] + [u['user_netrc_id'] for u in s.get('db_users', []) if 'user_netrc_id' in u]
+try:
+    n = netrc.netrc()
+except netrc.NetrcParseError as e:
+    sys.exit('.netrc parse error at line %s' % e.lineno)
+for i in ids:
+    print('OK     ' if n.authenticators(i) else 'MISSING', i)
+EOF
+```
+
+Every line must say `OK`. See [.netrc and credentials][netrc] for the format and the one-bad-line pitfall.
 
 ## Sharing a premade database
 
@@ -126,7 +146,7 @@ Check the licence of every dataset in a database before sharing it.
 - **Sender:** dump the database and send the file. The dump holds every row, including the users in `community.user` with their e-mail addresses and password hashes. Remove or replace personal users before dumping a database you share outside your own group.
 - **Receiver:**
   - install PostgreSQL ([PostgreSQL][postgres]) with a version at least as new as the sender's, and the Python environment ([Anaconda][anaconda]);
-  - write a setup scheme file with their own superuser credentials, `db`, `dump_path` pointing at the received file, and `db_users` with their own role passwords;
+  - write a setup scheme file with their own superuser credentials, `db`, `dump_path` pointing at the received file, and `db_users` pointing at their own `.netrc` entries (see [.netrc and credentials][netrc]); the restore checks these entries before it touches anything;
   - run **Restore database**.
 
 The database name and the role passwords are the receiver's own; only the content comes from the dump. The application users in `community.user`, and their passwords, come with the dump.
@@ -191,7 +211,9 @@ psql -d xspatula -c "SELECT schemaname, relname, n_live_tup FROM pg_stat_user_ta
 
 | File | Purpose |
 |---|---|
-| `scheme_local_setup.json` | Setup scheme file; `postgresdb` gives the database, the superuser credentials, `dump_path` and `db_users` |
+| `scheme_local_setup.json` | Setup scheme file; `postgresdb` gives the database, the superuser `host_netrc_id`, `dump_path` and `db_users` |
+| `setup/zzz/scheme_template_setup.json` | Template for the setup scheme, all credentials via netrc ids |
+| `~/.netrc` | Superuser and pg_user credentials; chmod 600 |
 | `dump_restore_db.ipynb` | Notebook running `Dump_database` and `Restore_database` |
 | `<db>.dump` | The dump file, outside the project folder |
 
@@ -202,6 +224,10 @@ psql -d xspatula -c "SELECT schemaname, relname, n_live_tup FROM pg_stat_user_ta
 [postgres]: ../postgres/
 
 [anaconda]: ../anaconda/
+
+[netrc]: ../netrc/
+
+[postgres_hba]: ../postgres/#securing-authentication-pg_hbaconf
 
 [scheme_file]: ../../framework/scheme_file/
 

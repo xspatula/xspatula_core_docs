@@ -1,13 +1,12 @@
 #### Scheme file for all other processing
 
-Once you have setup your database you should avoid using the postgres superuser for managing access and other privileges in your new database. Instead you should login as one of the pg_users defined in the _scheme_ file for setting up the database. The scheme file for using the database once it is setup does not need information on the postgres database cluster, it only needs a user_name and password for the new database (xspatula in the examples throughout this site):
+Once you have setup your database you should avoid using the postgres superuser for managing access and other privileges in your new database. Instead you log in as an ordinary application user, typically the initial user created at setup. The scheme file for using the database does not need information on the postgres database cluster, only a `.netrc` reference for the user. The shipped template is `setup/zzz/scheme_template_use.json`:
 
-```
+```json
 {
-  "project_path": "./xspatula",
+  "project_path": "./my_project",
   "user_project": {
-    "user_name": "ini_cat_5_user",
-    "password": "armchair-scouting-windowframe-bicycling"
+    "user_netrc_id": "my_initial_user"
   },
   "process": [
     {
@@ -20,29 +19,12 @@ Once you have setup your database you should avoid using the postgres superuser 
 }
 ```
 
-You can replace the user_name and password with a user_netrc_id, and hide your user login credentials in a .netrc file.
+The corresponding entry in `~/.netrc` (the same one `initial_user` uses at setup):
 
 ```
-{
-  "project_path": "./xspatula",
-  "user_project": {
-    "user_netrc_id": "ini_cat_5_user"
-  },
-  "process": [
-    {
-      "execute": true,
-      "verbose": 1,
-      "overwrite": false,
-      "delete": false
-    }
-  ]
-}
+machine my_initial_user   login first_user         password <long-random-9>
 ```
 
-The corresponding entry in the .netrc for the user ini_cat_5_user as given above becomes:
-
-```
-machine xspatula login ini_cat_5_user password armchair-scouting-windowframe-bicycling
-```
+`user_name` is optional: it is filled from the logged-in `community.user` record. A legacy `"user_name"` + `"password"` pair in `user_project` still works, but never commit it.
 
 To learn more, see the documents on [scheme_file][scheme_file] and [.netrc][netrc].

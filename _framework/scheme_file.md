@@ -7,7 +7,7 @@ excerpt: "In the Xspatula framework a scheme file defines: 1. the project you wa
 permalink: /framework/scheme_file/
 author_profile: false
 date:   2026-03-20 16:13:03 +0200
-last_modified_at:   2026-03-29 21:24:00 +0200
+last_modified_at:   2026-11-08
 ---
 
 In the Xspatula framework a scheme file defines:
@@ -76,36 +76,21 @@ Overwrite and delete are risky to set, the framework will replace existing recor
 
 ### Setup database credentials
 
-The setting of the database credentials differs between when you setup or delete the database compared to all other processes. Setting up or deleting the database requires that you give the login credentials for the postgres server superuser with rights to create new databases. You must also give the host (server), port and name of the database to create when setting up or deleting a database. When setting up the database, the host, port and database name are saved in .env files (see below). Thus you do not need to state these when setting up or deleting the database.
+**No password goes in a scheme file.** Every credential lives in `~/.netrc` and the scheme file references it by a `*_netrc_id`. See [.netrc and credentials][netrc].
 
-Scheme file object postgresdb for setting up a new Xspatula framework database:
-```
+The setting of the database credentials differs between when you setup or delete the database compared to all other processes. Setting up or deleting the database requires the postgres server superuser with rights to create new databases, plus the host (server), port and name of the database. When setting up the database, the host, port and database name are saved in .env files (see below), so later use schemes don't need them.
+
+Scheme file object postgresdb for setting up or deleting an Xspatula framework database:
+
+```json
 {
-  "project_path": "./your_framework_directory",
+  "project_path": "./my_project",
   "postgresdb": {
     "host": "localhost",
     "port": 5432,
-    "db": "xspatula",
-    "user_name": "postgres_superuser",
-    "password": "password_for_superuser"
+    "db": "my_database",
+    "host_netrc_id": "my_pg_superuser"
   }
-  ...
-  ...
-}
-```
-
-If you use a [.netrc][netrc] file, this instead becomes:
-
-```
-{
-  "project_path": "./your_framework_directory",
-  "postgresdb": {
-    "host": "localhost",
-    "port": 5432,
-    "db": "xspatula",
-    "host_netrc_id": "my_postgres_cluster"
-  }
-  ...
   ...
 }
 ```
@@ -113,74 +98,48 @@ If you use a [.netrc][netrc] file, this instead becomes:
 with a corresponding machine in the .netrc file:
 
 ```
-machine my_postgres_cluster login postgres_superuser password password_for_superuser
+machine my_pg_superuser   login postgres_superuser password <long-random-1>
 ```
 
 The superuser used for setting up the new database will also become a superuser in the new database.
 
+**Legacy:** `"user_name"` + `"password"` in `postgresdb` instead of `host_netrc_id` still works, but prints `⚠️ plaintext password in scheme file`. Don't use it in any file you commit.
+
 ### Define pg_users
 
-You can also add additional postgres users (pg_user in postgres jargon, which is not a human person but a key that a human user get access to if logging in with the correct credentials to the database you are creating directly in the scheme file. There are 8 predefined groups of pg_users (also called roles in the postgres jargon):
+You also define the postgres users (pg_user in postgres jargon: not a human person but a key that a human user gets access to when logging in with the correct credentials) for the database you are creating directly in the scheme file. There are 7 predefined pg_users (also called roles in the postgres jargon):
 
 - community_admin [for administrating users],
-- login_evaluation (user_cat_6) [for checking login credentials],
+- login_evaluation [for checking login credentials],
 - user_cat_1,
 - user_cat_2,
 - user_cat_3,
 - user_cat_4,
 - user_cat_5 [for users who can SELECT, INSERT, UPDATE AND DELETE in most tables]
 
-The privileges for the user categories listed above are granted and revoked from the JSON files `./setup/src_setup/lib_setup/roles_grants.json` and
+The privileges and role attributes for the user categories listed above are granted and revoked from the JSON files `./setup/src_setup/lib_setup/roles_grants.json` and
 `./setup/src_setup/lib_setup/revoke_privileges.json`.
-
 
 You can change the user categories, their names and privileges to fit your own needs. But changing them will have downstream effects in other settings that you then must also accommodate. **Note** that only the superuser that owns the database can change the pg_users and their privileges.
 
-The scheme file example below shows how to set up one pg_user per predefined pg_user group.
-```
+The scheme file example below (from `setup/zzz/scheme_template_setup.json`) sets up one pg_user per predefined role. Each `user_netrc_id` points to a `.netrc` entry; its `login` becomes the role name (an explicit `"user_id"` overrides it):
+
+```json
 {
-  "project_path": "./your_framework_directory",
+  "project_path": "./my_project",
   "postgresdb": {
-    host": "localhost",
+    "host": "localhost",
     "port": 5432,
-    "db": "xspatula",
-    "host_netrc_id": "my_postgres_cluster"
+    "db": "my_database",
+    "host_netrc_id": "my_pg_superuser",
     "db_users": [
-      {
-        "user_id": "your_community_admin",
-        "password": "first-difficult-password",
-        "role": "community_admin"
-      },
-      {
-        "user_id": "your_login_evaluation",
-        "password": "second-difficult-password",
-        "role": "login_evaluation"
-      },
-      {
-        "user_id": "your_user_cat_1",
-        "password": "fourth-difficult-password",
-        "role": "user_cat_1"
-      },
-      {
-        "user_id": "your_user_cat_2",
-        "password": "fifth-difficult-password",
-        "role": "user_cat_2"
-      },
-      {
-        "user_id": "your_user_cat_3",
-        "password": "sixth-difficult-password",
-        "role": "user_cat_3"
-      },
-      {
-        "user_id": "your_user_cat_4",
-        "password": "seventh-difficult-password",
-        "role": "user_cat_4"
-      },
-      {
-        "user_id": "your_user_cat_5",
-        "password": "eigth-difficult-password",
-        "role": "user_cat_5"
-      }
+      { "user_netrc_id": "community_admin",  "role": "community_admin" },
+      { "user_netrc_id": "login_evaluation", "role": "login_evaluation" },
+      { "user_netrc_id": "user_cat_1",       "role": "user_cat_1" },
+      { "user_netrc_id": "user_cat_2",       "role": "user_cat_2" },
+      { "user_netrc_id": "user_cat_3",       "role": "user_cat_3" },
+      { "user_netrc_id": "user_cat_4",       "role": "user_cat_4" },
+      { "user_netrc_id": "user_cat_5",       "role": "user_cat_5" }
     ]
   },
   "process": [
@@ -193,6 +152,33 @@ The scheme file example below shows how to set up one pg_user per predefined pg_
   ]
 }
 ```
+
+Every setup run re-applies each role's password (from `.netrc`) and attributes (from `roles_grants.json`). To change a pg_user password, edit `.netrc` and re-run setup. See [pg_users][pg_users].
+
+The legacy form `{"user_id": ..., "password": ..., "role": ...}` still works but prints a plaintext-password warning.
+
+### initial_user
+
+The optional top-level `initial_user` block (a sibling of `postgresdb`) creates the first `community.user` at setup. The bootstrap row in the seed file `user_records_v10_sql.json` has `"password": "{initial_user}"`; at setup the framework reads the password from `.netrc`, bcrypt-hashes it in memory and fills the row:
+
+```json
+"initial_user": {
+  "user_netrc_id": "my_initial_user",
+  "email": "first.user@example.com",
+  "first_name": "First",
+  "last_name": "User",
+  "organisation_id__organisation_name": "my_organisation",
+  "territory_id__territory_name": "my_territory",
+  "stratum_code": "5"
+}
+```
+
+- The netrc `login` becomes `user_name` (or `email` if it contains `@`).
+- Every other key overrides the matching column of the seed row.
+- Without `initial_user` in the scheme, the placeholder row is skipped with a warning.
+- Use one placeholder row per seed file.
+
+The same netrc entry is used for logging in afterwards (see [Login credentials](#login-credentials)). Full walkthrough: [Setting up the initial user][initial_user].
 
 #### .env files
 
@@ -212,28 +198,18 @@ DB_PASSWORD=db_user_password
 
 ### Login credentials
 
-When an ordinary (human) user logs into the database, the user only has to give the user_name and password. All other information required (host, port, database name) are retrieved from the .env file. Thus the scheme file for working with projects in the database, once it is set up, only requires a project path and login credentials:
+When an ordinary (human) user logs into the database, all information on host, port and database name is retrieved from the .env file. The scheme file for working with projects in the database, once it is set up, only requires a project path and a `.netrc` reference (template: `setup/zzz/scheme_template_use.json`):
 
-```
+```json
 {
-  "project_path": "~/your_framework_directory",
+  "project_path": "./my_project",
   "user_project": {
-    "user_name": "database_user",
-    "password": "database_user_password"
+    "user_netrc_id": "my_initial_user"
   }
 }
 ```
 
-If the user instead chooses to store the credentials in a .netrc file, the scheme file becomes even smaller:
-
-```
-{
-  "project_path": "~/your_framework_directory",
-  "user_project": {
-    "user_netrc_id": "user_netrc_code"
-  }
-}
-```
+`user_netrc_id` alone is enough: `user_name` is filled from the logged-in `community.user` record. The legacy `"user_name"` + `"password"` pair in `user_project` still works, but never commit it.
 
 In the example above no default settings are included, the system will then set the following default values:
 
@@ -250,7 +226,7 @@ To define explicit default settings, the scheme file could for example look like
 {
   "project_path": "~/your_framework_directory",
   "user_project": {
-    "user_netrc_id": "user_netrc_code"
+    "user_netrc_id": "my_initial_user"
   },
   "process": [
     {
@@ -269,9 +245,15 @@ As noted above, if any of the default values appear in an individual process JSO
 
 | File | Purpose |
 |---|---|
-| `scheme_xspatula_local_setup.json` | Scheme file for creating a new database; defines postgres cluster credentials, the pg_users and default process settings |
-| `scheme_xspatula_local_use.json` | Scheme file for using an existing database; defines a single project user — no superuser credentials required |
+| `setup/zzz/scheme_template_setup.json` | Setup scheme template; superuser, 7 pg_users and initial_user, all via netrc ids |
+| `setup/zzz/scheme_template_use.json` | Use scheme template; `user_project.user_netrc_id` only |
+| `~/.netrc` | All credentials; chmod 600 |
+| `setup/git_hooks/pre-commit` | Blocks commits of plaintext passwords in JSON; install manually |
 
 [notebook]: ../notebook/
 
 [netrc]: ../../setup_db/netrc/
+
+[pg_users]: ../../building/pg_users/
+
+[initial_user]: ../../building/initial_user/

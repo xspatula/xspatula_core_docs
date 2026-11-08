@@ -7,7 +7,7 @@ excerpt: "The first step in building up an Xspatula framework is to setup a post
 permalink: /setup_db/
 author_profile: false
 date:   2026-03-15 16:13:03 +0200
-last_modified_at:   2026-10-18
+last_modified_at:   2026-11-08
 ---
 
 The first step in building up an Xspatula framework is to setup a postgreSQL database. You can also use Xspatula just for setting up a database without using the framework for something else.
@@ -25,21 +25,23 @@ To build your own postgreSQL database you might need to install the following ap
 
 ## Hidden files and security
 
-To create secure login credentials for the postgreSQL superuser that you must have for building the framework database, and for other users accessing the database, two sets of hidden files holding the credentials can be used.
+**No password ever goes in a scheme file or a seed JSON file.** Scheme files live in the project folder and get committed with it, and a password committed to a public repository is compromised, even after deletion. Every credential lives in `~/.netrc` and is referenced from the scheme file by a `*_netrc_id`. Two sets of hidden files hold credentials:
 
 ### .netrc
 
-A [.netrc][netrc] file is a hidden file in your home directory where you can store login credential to postgreSQL or any other server resource. You do not need to use a .netrc file to setup or run the Xspatula framework, you can also give your login and password in plain text in a _scheme_ file as explained below. If you want to use a .netrc file, create a file named .netrc in the home directory of your own machine and enter the credentials by stating _machine_, _login_ and _password_:
+A [.netrc][netrc] file is a hidden file in your home directory holding one line per credential:
 
 ```
-machine postgresql login <superuser> password <passphrase>
+machine my_pg_superuser login postgres_superuser password <long-random-password>
 ```
 
-Where _machine_ is the code word you send to .netrc for the resource you want to access, and _login_ and _password_ are the credentials on the resource you are trying to enter.
+_machine_ is the id you reference from the scheme file, _login_ and _password_ are the credentials. See [.netrc and credentials][netrc] for the full example block, the rules and the pitfalls.
+
+Also make sure PostgreSQL actually checks passwords: several installs default to `trust` in `pg_hba.conf`. See [Securing authentication][postgres_hba].
 
 ### .environment
 
-When a user tries to login to the framework database, a postgreSQL session is opened and the user credentials are read from the database. If the user and password are found, the database is instead opened from an environment (.env) file reflecting the rights of the user logging in. When you setup an Xspatula database, the framework automatically creates .env files for different categories of postgres users (pg_user in postgres jargon). The framework includes some default pg_users, but you most probably want to define your own. All the hidden .env files will by default be saved in the framework python package path:
+When a user tries to login to the framework database, a postgreSQL session is opened and the user credentials are read from the database. If the user and password are found, the database is instead opened from an environment (.env) file reflecting the rights of the user logging in. When you setup an Xspatula database, the framework automatically creates .env files for different categories of postgres users (pg_user in postgres jargon). The framework includes some default pg_users, but you most probably want to define your own. All the hidden .env files will by default be saved in the framework python package path (gitignored, chmod 600, but still plaintext):
 
 ```
 ./src/postgres/environment
@@ -83,100 +85,76 @@ The _scheme_ file and the JSON command files can be located anywhere on your sys
 
 #### Scheme file for database setup
 
-The scheme file for setting up your database must define both the postgres superuser that will own the database and at least one user that is then used for setting up processes and adding other users. Explained in more detail below.
+The scheme file for setting up your database defines the postgres superuser that will own the database, the pg_users, and optionally the initial (bootstrap) application user. All three refer to entries in `~/.netrc`; no password appears in the file. The shipped template is `setup/zzz/scheme_template_setup.json`:
 
-In the example of a _scheme_ file for setting up a database below I have added some comments indicated by a hashtag (#). These comments are not allowed in a production version of a _scheme_ file.
-
-```
+```json
 {
-  "project_path": "./xspatula", # Absolute or relative path to the root folder of your project, e.g. for setting up a database
-  "postgresdb": { # Defines the postgres database cluster and your superuser credentials allowing you to create a new database
-    "host": "localhost", # The host of your database cluster
-    "port": 5432, # The port that your database cluster is attached to
-    "db": "name_of_db_to_create", # The name of the postgreSQL database to create
-    "host_netrc_id": "my_host_db_netrc_access_code", # The login credentials for your overaraching postgres database
-    "user_name": "your_superuser_for_postgres", # Only required if host_netrc_id not stated
-    "password": "your_superuser_password_for_postgres", # Only required if host_netrc_id not stated
-    "db_users": [ # array of pg_users to add as users in the new postgres database and their credentials
-      {
-        "user_id": "community_admin", # pg_user for community administration
-        "password": "set_your_password_for_community_admin", # password for pg_user community_admin
-        "role": "community_admin" # predefined (hardcoded) type of pg_user
-      },
-      {
-        "user_id": "login_evaluation", # pg_user for checking any login attempt to the database (very restricted)
-        "password": "set_your_password_for_login_evaluation", # password for pg_user login_evaluation
-        "role": "login_evaluation" # predefined (hardcoded) type of pg_user
-      },
-      {
-        "user_id": "user_cat_1", # most restricted database pg_user
-        "password": "set_your_password_for_user_cat_1", # password for pg_user user_cat_1
-        "role": "user_cat_1" # predefined (hardcoded) type of pg_user
-      },
-      ...
-      ...
-      {
-        "user_id": "user_cat_5", # most permissive database pg_user
-        "password": "set_your_password_for_user_cat_5", # password for pg_user user_cat_5
-        "role": "user_cat_5" # predefined (hardcoded) type of pg_user
-      }
+  "project_path": "./my_project",
+  "postgresdb": {
+    "host": "localhost",
+    "port": 5432,
+    "db": "my_database",
+    "host_netrc_id": "my_pg_superuser",
+    "dump_path": "~/xspatula/db_dump/my_database.dump",
+    "db_users": [
+      { "user_netrc_id": "community_admin",  "role": "community_admin" },
+      { "user_netrc_id": "login_evaluation", "role": "login_evaluation" },
+      { "user_netrc_id": "user_cat_1",       "role": "user_cat_1" },
+      { "user_netrc_id": "user_cat_2",       "role": "user_cat_2" },
+      { "user_netrc_id": "user_cat_3",       "role": "user_cat_3" },
+      { "user_netrc_id": "user_cat_4",       "role": "user_cat_4" },
+      { "user_netrc_id": "user_cat_5",       "role": "user_cat_5" }
     ]
   },
-  "process": [ # Default settings for all processes called from this scheme file
+  "initial_user": {
+    "user_netrc_id": "my_initial_user",
+    "email": "first.user@example.com",
+    "email_alt": "first.user.alt@example.com",
+    "first_name": "First",
+    "last_name": "User",
+    "organisation_id__organisation_name": "my_organisation",
+    "territory_id__territory_name": "my_territory",
+    "stratum_code": "5"
+  },
+  "process": [
     {
       "execute": true,
       "verbose": 1,
       "overwrite": false,
-      "delete": false # Must be set to false to setup a database
+      "delete": false
     }
   ]
 }
 ```
 
+- `host_netrc_id`: the postgres superuser that creates and owns the database.
+- `db_users[].user_netrc_id`: one pg_user each; the netrc `login` becomes the role name (an explicit `"user_id"` overrides it), and `role` picks the predefined role type. All entries are resolved before anything is created; if one fails, nothing is set up.
+- `initial_user`: the first `community.user`, see [Setting up the initial user][initial_user].
+- `process.delete` must be `false` to set up a database.
+
+The matching `.netrc` block is on the [.netrc and credentials][netrc] page.
+
 #### Default (human) users
 
-The postgres superuser defined in the _scheme_ file for setting up your new database will become both the owner and a superuser for your new database. The default processes defined for setting up a new database include the definition of ordinary user(s) (not pg_users) in the database. The default user (Jane Doe) in the online repository has the user name _jane_doe_ and the password is _hello-xspatula_. It is recommended that you change the names and passwords of the default users in the file
+The postgres superuser defined in the _scheme_ file for setting up your new database will become both the owner and a superuser for your new database. The default processes defined for setting up a new database include the definition of ordinary user(s) (not pg_users) in the database. The bootstrap user's row uses the `"{initial_user}"` placeholder and gets its identity and password from `initial_user` and `.netrc` (see below). The other example users (e.g. _jane_doe_) ship with fixed bcrypt hashes; remove them or replace their hashes before using the database for real. The seed file is
 
 ```
 ./setup/zzz/xspatula/setup_db/json/community/user_records_v10_sql.json.
 ```
 
-You must then also change the login credentials in the subsequent _scheme_ files for ordinary login (not database setup). You can also always login with the superuser that you used for setting up the database.
+For ordinary login (not database setup) the use scheme points `user_project.user_netrc_id` at the same `.netrc` entry as `initial_user`, so there is nothing extra to set up.
 
 For details on including default users as part of the database setup, see the document on [defining schemas and tables][schemas_tables].
 
-#### Hashing user passwords
+#### Passwords for application users
 
-The `password` column in `community.user` does not store plain text. It stores a bcrypt hash, and the framework verifies a login attempt by hashing the entered password and comparing it against that stored hash — it never compares plain text directly. This means the `"hello-xspatula"` shown above for Jane Doe is the password you'd actually type in at login, not what belongs in the JSON file: the JSON must hold the hash produced by a small command-line tool the framework ships with, `setup/hash_password.py`.
+The `password` column in `community.user` stores a bcrypt hash, never plain text. You don't hash anything by hand for the first user: add an `initial_user` block to the setup scheme (shown above) and put the placeholder `"{initial_user}"` as the bootstrap row's `password` in `user_records_v10_sql.json`. At setup the framework reads the password from `.netrc`, hashes it in memory and fills the row. See [Setting up the initial user][initial_user].
 
-To generate a hash, open a terminal, `cd` into your local copy of the framework (the directory containing the `setup/` folder), activate your Anaconda environment if you're using one, and run:
-
-```
-python3 setup/hash_password.py
-```
-
-You'll be prompted twice, with hidden input:
-
-```
-Password to hash:
-Repeat password:
-```
-
-The tool prints a bcrypt hash that looks like `$2b$12$KIXQ7z3n...` (yours will differ). Copy that whole string — it's what you paste into the `password` value in `community_user_records_v10_sql.json`, not the password itself.
-
-You can also pass the password directly as an argument:
-
-```
-python3 setup/hash_password.py 'some-password'
-```
-
-This is quicker but leaves the plain-text password visible in your shell history and process list, so prefer the no-argument, prompted form on any machine you share with others.
-
-Do this once per default user before running `setup_db.ipynb`, and again any time you want to reset a user's password by hand-editing the database (`UPDATE community.user SET password = '<hash>' WHERE user_name = '...';`).
+`setup/hash_password.py` is only needed to reset a password on a **live** database (`UPDATE community.user SET password = '<hash>' WHERE user_name = '...';`) or to seed additional, non-bootstrap users.
 
 #### Scheme file for database delete
 
-The framework package allows deleting either parts of, or the whole database with a single process. To do that the _scheme_ file must still have a project_path, define the postgres database cluster and your superuser credentials allowing you to delete the database. You must also set the process object delete to true:
+The framework package allows deleting either parts of, or the whole database with a single process. The delete scheme needs a project_path, the postgres database cluster and your superuser netrc id. You must also set the process object delete to true:
 
 ```
 {
@@ -185,8 +163,7 @@ The framework package allows deleting either parts of, or the whole database wit
     "host": "localhost", # The host of your database
     "port": 5432, # The port that your database is attached to
     "db": "name_of_db_to_delete", # The name of the postgreSQL database to delete
-    "user_name": "your_superuser_for_postgres", # Only required if host_netrc_id not stated
-    "password": "your_superuser_password_for_posgres", # Only required if host_netrc_id not stated
+    "host_netrc_id": "my_pg_superuser" # .netrc entry for the postgres superuser
   },
   "process": [ # Default settings for all processes called from this scheme file
     {
@@ -198,6 +175,8 @@ The framework package allows deleting either parts of, or the whole database wit
   ]
 }
 ```
+
+Deleting a database never needs pg_user passwords. Roles belong to the server, are shared by every database on it, and are not dropped with a database, so `db_users` is not needed in the delete scheme.
 
 ### Job file (project file)
 
@@ -328,7 +307,7 @@ For details on defining tables and columns, see the document on [Defining schema
 
 The _process_ files `"community_organisation_records_v10_sql.json"` and `"community_user_records_v10_sql.json"` directly inserts records in the community schema tables organisation and user. The users inserted will get immediate access to the created database.
 
-Note that this is a different password to the ones in the postgres pg_user _scheme_ file shown above: the pg_user password authenticates the *database connection* itself, while `community.user.password` authenticates an individual *application login* and must be pre-hashed as described in [hashing user passwords](#hashing-user-passwords). This setup-time route is meant for your initial, default users. Once the database is running, organisations and users can also be added by non-technical staff filling in an Excel sheet — see [Setup Community][setup_community].
+Note that this is a different password to the ones in the postgres pg_user _scheme_ file shown above: the pg_user password authenticates the *database connection* itself, while `community.user.password` authenticates an individual *application login* and is stored as a bcrypt hash, computed automatically for the bootstrap user as described in [passwords for application users](#passwords-for-application-users). This setup-time route is meant for your initial, default users. Once the database is running, organisations and users can also be added by non-technical staff filling in an Excel sheet — see [Setup Community][setup_community].
 
 The figure below illustrates the content and connections for the schema community after setting up the Xspatula framework.
 
@@ -422,7 +401,7 @@ The directory structure for the project defined in the scheme_file and the job_f
 
 | File | Purpose |
 |---|---|
-| `scheme_xspatula_local_setup.json` | Scheme file for database setup; defines postgres superuser credentials, pg_users and default process settings |
+| `scheme_local_setup.json` | Scheme file for database setup; defines postgres superuser, pg_users and initial_user (as netrc ids) and default process settings |
 | `job_setup_db.json` | Job file for database setup; points to the pilot file and process file directory |
 | `db_setup.txt` | Pilot file; lists the 10 JSON process files to execute in order for a full database setup |
 
@@ -433,6 +412,10 @@ The directory structure for the project defined in the scheme_file and the job_f
 [anaconda]: ./anaconda/
 
 [netrc]: ./netrc/
+
+[postgres_hba]: ./postgres/#securing-authentication-pg_hbaconf
+
+[initial_user]: {{ "/building/initial_user/" | relative_url }}
 
 [notebook]: ../framework/notebook/
 
@@ -448,8 +431,8 @@ The directory structure for the project defined in the scheme_file and the job_f
 
 [dump_restore]: ./dump_restore/
 
-[auditing]: /auditing/
+[auditing]: {{ "/auditing/" | relative_url }}
 
-[setup_community]: /setup_community/
+[setup_community]: {{ "/setup_community/" | relative_url }}
 
 [define_process_tables]: ../setup_processes/define_process/#process-schema-tables

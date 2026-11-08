@@ -7,7 +7,7 @@ excerpt: "Setting up a database like the AI4SoilHealth database in the framework
 permalink: /ai4sh/setup_ai4sh_db
 author_profile: false
 date:   2026-03-22 06:13:03 +0200
-last_modified_at:   2026-03-22 06:13:03 +0200
+last_modified_at:   2026-11-08
 ---
 
 Setting a database like the AI4SoilHealth database in the framework is just an extension of the general principles for setting up a database introduced in the [framework introduction section][framework]. What is additionally required is the definition of schemas and tables and their connections.
@@ -65,77 +65,35 @@ If you split the project hierarchical folder arrangement by putting your scheme 
 
 ### Edit the postgreSQL super user credentials
 
-You must have access to a postgreSQL cluster where you are superuser with rights to create new databases. In the [scheme][scheme_file] file <span class='file'>scheme_ai4sh_setup_db.json</span>, change the definitions for these children of the object postgresdb to your settings:
+You must have access to a postgreSQL cluster where you are superuser with rights to create new databases. Put the credentials in your [.netrc][netrc] file, never in the scheme file. In the [scheme][scheme_file] file <span class='file'>scheme_ai4sh_setup_db.json</span>, reference the `.netrc` entry:
 
 ```
 "postgresdb": {
     "host": "localhost",
     "port": 5432,
     "db": "ai4sh",
-    "user_name": "your_postgres_superuser",
-    "password": "your_postgres_superuser_password"
+    "host_netrc_id": "my_pg_superuser"
 ```
-
-You can also put the login credentials in a [.netrc][netrc] file and replace the user_name and password objects with an object for reading your credentials using netrc:
-
-```
-"postgresdb": {
-    "host": "localhost",
-    "port": 5432,
-    "db": "ai4sh",
-    "host_netrc_id": "your_netrc_machine_code"
-```   
 
 ### Edit the pg_users to include with setup
 
-In the scheme file you can also add pg_users to include in the database when setting it up. There are 8 default pg_users included in the project for setting up the AI4SH database defined in the prepared scheme file:
+In the scheme file you also add the pg_users to include in the database when setting it up. Each entry references a `.netrc` entry; the netrc `login` becomes the role name:
 
 ```
     "db_users": [
-      {
-        "user_id": "community_admin",
-        "password": "guessing-rubble-garden-opera",
-        "role": "community_admin"
-      },
-      {
-        "user_id": "login_evaluation",
-        "password": "hippodrome-bicycle-concert-shuttle",
-        "role": "login_evaluation"
-      },
-      {
-        "user_id": "user_cat_1",
-        "password": "secret-parsimony-archipelago-hedgehog",
-        "role": "user_cat_1"
-      },
-      {
-        "user_id": "user_cat_2",
-        "password": "sailing-courageous-upsidedown-castle",
-        "role": "user_cat_2"
-      },
-      {
-        "user_id": "user_cat_3",
-        "password": "rollerscates-forever-skyline-coconut",
-        "role": "user_cat_3"
-      },
-      {
-        "user_id": "user_cat_4",
-        "password": "superfluid-altruistic-guitarplayer-climatechange",
-        "role": "user_cat_4"
-      },
-      {
-        "user_id": "user_cat_5",
-        "password": "fireplace-olympicgames-grassroot-luminescence",
-        "role": "user_cat_5"
-      }
+      { "user_netrc_id": "community_admin",  "role": "community_admin" },
+      { "user_netrc_id": "login_evaluation", "role": "login_evaluation" },
+      { "user_netrc_id": "user_cat_1",       "role": "user_cat_1" },
+      { "user_netrc_id": "user_cat_2",       "role": "user_cat_2" },
+      { "user_netrc_id": "user_cat_3",       "role": "user_cat_3" },
+      { "user_netrc_id": "user_cat_4",       "role": "user_cat_4" },
+      { "user_netrc_id": "user_cat_5",       "role": "user_cat_5" }
     ]
 ```
 
-These 8 roles have hardcoded privileges in the framework package. You can change that in the python module
+The matching `.netrc` block and the rules for it are on [.netrc and credentials][netrc]. Roles are shared by every database on a server, so if you already set up another Xspatula database on the same server, the same entries are reused.
 
-```
-./setup/src_setup/lib_setup/setup_db.py
-```
-[TG TODO: THIS SHOULD BE CHANGED TO A JSON FILE THAT IS READ INSTEAD]
+The privileges and role attributes are defined in `./setup/src_setup/lib_setup/roles_grants.json` (and `revoke_privileges.json`). See [pg_users][pg_users].
 
 ## Edit the Jupyter notebook setup_db
 
@@ -196,3 +154,5 @@ _Funded by the European Union. The views expressed are those of the authors and 
 [github]: https://github.com/
 
 [github_framework_project_ai4sh_database]: https://github.com/AI4SH/framework_project_ai4sh_database
+
+[pg_users]: ../building/pg_users/

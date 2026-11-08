@@ -45,8 +45,10 @@ setup_db:
         url: /setup_db/postgres/
       - title: "Anaconda"
         url: /setup_db/anaconda/
-      - title: ".netrc"
+      - title: ".netrc & credentials"
         url: /setup_db/netrc/
+      - title: "Securing PostgreSQL"
+        url: /setup_db/postgres/#securing-authentication-pg_hbaconf
       - title: "Defining schemas & tables"
         url: /setup_db/schemas_tables/
       - title: "Defining default users"

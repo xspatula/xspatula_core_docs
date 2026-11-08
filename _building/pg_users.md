@@ -3,24 +3,40 @@ title: "Defining pg_users and their environment files"
 layout: single
 sidebar:
   nav: "building"
-excerpt: "pg_users are created only once, by the superuser, when a database is set up. Every ordinary community.user row logs in through whichever pg_user its stratum_code points to — decide your roster before that first run."
+excerpt: "pg_users are created by the superuser when a database is set up, with passwords from .netrc. Every setup run re-applies their passwords and attributes. Every ordinary community.user row logs in through whichever pg_user its stratum_code points to — decide your roster before that first run."
 permalink: /building/pg_users/
 author_profile: false
 date: 2026-08-25
-last_modified_at: 2026-08-25
+last_modified_at: 2026-11-08
 ---
 
 Your project needs its own set of pg_users — the postgres-level roles ordinary logins actually run under — defined in your own setup scheme file. This page covers the mechanics of how that works and why it has to be decided up front.
 
 ## Where pg_users are defined
 
-In the `postgresdb.db_users` array of your project's own setup scheme file, mirroring the shipped `setup/zzz/scheme_xspatula_local_setup.json`. The full JSON shape, the 8 predefined role names, and how to add one pg_user per role are already documented in [Scheme file][framework_scheme_file] — that page is the syntax reference; this one covers what happens once you run it.
+In the `postgresdb.db_users` array of your project's own setup scheme file, mirroring the shipped `setup/zzz/scheme_template_setup.json`. Each entry references a `.netrc` entry, never a password:
+
+```json
+"db_users": [
+  { "user_netrc_id": "community_admin",  "role": "community_admin" },
+  { "user_netrc_id": "login_evaluation", "role": "login_evaluation" },
+  { "user_netrc_id": "user_cat_1",       "role": "user_cat_1" },
+  ...
+  { "user_netrc_id": "user_cat_5",       "role": "user_cat_5" }
+]
+```
+
+The netrc `login` becomes the PostgreSQL role name; an explicit `"user_id"` overrides it. `Resolve_db_users()` (`setup_db_initiate.py`) resolves all entries in memory before anything is created, and only on setup (delete never needs pg_user passwords). It is fail-fast: if any entry can't be resolved, nothing is set up. The matching `.netrc` lines are on [.netrc and credentials][netrc]. Roles are server-wide, so all projects on one server share these entries.
+
+The legacy form `{"user_id", "password", "role"}` still works but prints `⚠️ plaintext password in scheme file`.
+
+The full JSON shape and the predefined role names are documented in [Scheme file][framework_scheme_file] — that page is the syntax reference; this one covers what happens once you run it.
 
 ## Only the superuser can create pg_users
 
 [Scheme file][framework_scheme_file] already states this; here's concretely why it's true, not just asserted. Creating postgres roles (`Create_db_roles`) and writing their `.env` credential files (`Create_db_environment_dot`) both happen inside `Initiate_database` — the function driven by `setup_db.ipynb` — and only run after the operator has authenticated as the postgres superuser and confirmed the "Set up database?" prompt. No other code path in the framework creates a pg_user or rewrites an `.env` file. There's no way for an ordinary logged-in user, even a stratum-5 one, to add a pg_user later.
 
-**Practical implication**: decide your full pg_user roster — which of the 8 roles you actually need — before your first `setup_db.ipynb` run. Adding one afterward means running database setup again as the superuser.
+**Practical implication**: decide your full pg_user roster — which of the roles you actually need — before your first `setup_db.ipynb` run. Adding one afterward means running database setup again as the superuser (which is safe; see below).
 
 ## How the .env files actually get created
 
@@ -34,7 +50,7 @@ DB_HOST=<host>
 DB_PORT=<port>
 ```
 
-So a `db_users` entry with `"user_id": "user_cat_3"` produces `src/postgres/environment/.user_cat_3.env`. These files are generated, not hand-edited — re-running database setup regenerates them from whatever your scheme file's `db_users` array currently says.
+So a `db_users` entry whose netrc login is `user_cat_3` produces `src/postgres/environment/.user_cat_3.env`. These files are generated, not hand-edited — re-running database setup regenerates them from your scheme file's `db_users` and your `.netrc`. They are written with chmod 600 and are gitignored, but they are still plaintext.
 
 ## How an ordinary user links to a pg_user at login
 
@@ -57,7 +73,7 @@ The shipped defaults happen to make these coincide at the top: stratum 5 resolve
 
 Every role's grants live in two JSON config files:
 
-- `setup/src_setup/lib_setup/roles_grants.json` — one `GRANT`-style SQL template per role, with `{user}`/`{password}`/`{db}` placeholders.
+- `setup/src_setup/lib_setup/roles_grants.json` — one `CREATE USER … WITH …; GRANT …` SQL template per role, with `{user}`/`{password}`/`{db}` placeholders.
 - `setup/src_setup/lib_setup/revoke_privileges.json` — the matching `REVOKE`-style template per role, `{user}`/`{db}`.
 
 Both files sit in the framework's own shared setup tooling, not under your project's `setup/zzz/<project>/` tree — that's deliberate, not an exception to "keep core files untouched" elsewhere in this collection. A postgres role is a single-cluster concept, not something namespaced per project the way schemas and tables are, so this is the framework's intended, supported place to customize it.
@@ -71,7 +87,12 @@ A representative entry from each file — `user_cat_1`'s connect-only pair:
 "user_cat_1": "REVOKE CONNECT ON DATABASE {db} FROM {user};"
 ```
 
-**Changing an existing role's grants**: edit its value in `roles_grants.json` (and update the matching `revoke_privileges.json` entry to match), then re-run `setup_db.ipynb`'s main "Setup database" cell as the superuser — nothing else. Role creation is idempotent and self-healing: each run hashes the role's configured grant SQL and compares it against a hash stored as a comment on the postgres role from the last run. Unchanged roles are skipped; a changed role has its old grants automatically revoked (via `revoke_privileges.json`) before the new grants are applied and the new hash stored. There's no manual `REVOKE`/`GRANT` to write and no need to rebuild the database — re-running when nothing changed is a safe no-op.
+**Passwords and attributes are re-applied on every setup run.** For every role that already exists, `Create_db_roles` (`setup_db.py`) runs `ALTER ROLE <user> WITH <attributes> PASSWORD <pw>`:
+
+- **Password** comes from `.netrc`. **To change a pg_user password: edit `.netrc`, re-run the setup cell.** That's all. The password is sent as a bound parameter, never formatted into SQL.
+- **Attributes**: `Role_attributes()` reads the `CREATE USER … WITH` clause in `roles_grants.json` and sets all of `SUPERUSER`, `CREATEDB`, `CREATEROLE`, `LOGIN`, `REPLICATION` and `BYPASSRLS` explicitly: listed → on, not listed → `NO…`. `roles_grants.json` is authoritative. A manual `ALTER ROLE … NOLOGIN` (or any other attribute change made in `psql`) is undone on the next setup run; make the change in `roles_grants.json` instead.
+
+**Changing an existing role's grants**: edit its value in `roles_grants.json` (and update the matching `revoke_privileges.json` entry to match), then re-run `setup_db.ipynb`'s main "Setup database" cell as the superuser — nothing else. Each run hashes the role's configured grant SQL and compares it against a hash stored as a comment on the postgres role from the last run. Unchanged grants are skipped; changed grants are automatically revoked (via `revoke_privileges.json`) before the new grants are applied and the new hash stored. The password is not part of this hash. (Consequence: the first setup run after upgrading to this version re-applies all grants once. Harmless.) There's no manual `REVOKE`/`GRANT` to write and no need to rebuild the database.
 
 **Adding a brand-new role**: add a new key to both JSON files, then reference that role name in your scheme file's `db_users` entries via the `"role"` field (see [Scheme file][framework_scheme_file]).
 
@@ -81,12 +102,15 @@ A representative entry from each file — `user_cat_1`'s connect-only pair:
 
 | File | Purpose |
 |---|---|
-| `setup/zzz/scheme_<project>_local_setup.json` | Your project's setup scheme file; its `postgresdb.db_users` array defines the pg_user roster |
-| `src/postgres/environment/.<user_id>.env` | Generated, one per `db_users` entry — never hand-edit, re-running setup regenerates them |
+| `~/.netrc` | One entry per pg_user; the passwords live only here |
+| `setup/zzz/scheme_template_setup.json` | Setup scheme template; copy to your project's setup scheme; `postgresdb.db_users` defines the pg_user roster |
+| `src/postgres/environment/.<user_id>.env` | Generated, one per `db_users` entry, chmod 600, gitignored — never hand-edit, re-running setup regenerates them |
 | `setup/src_setup/lib_setup/roles_grants.json` | Framework-level; GRANT SQL template per role — edit to change or add a role's privileges |
 | `setup/src_setup/lib_setup/revoke_privileges.json` | Framework-level; matching REVOKE SQL template per role — keep in sync with the file above |
+| `setup/git_hooks/pre-commit` | Blocks commits of plaintext passwords in JSON; install manually |
 
-[framework_scheme_file]: /framework/scheme_file/
-[manage_process]: /setup_db/manage_process/
-[building_initial_user]: /building/initial_user/
-[building_add_users]: /building/add_users/
+[framework_scheme_file]: {{ "/framework/scheme_file/" | relative_url }}
+[manage_process]: {{ "/setup_db/manage_process/" | relative_url }}
+[netrc]: {{ "/setup_db/netrc/" | relative_url }}
+[building_initial_user]: {{ "/building/initial_user/" | relative_url }}
+[building_add_users]: {{ "/building/add_users/" | relative_url }}

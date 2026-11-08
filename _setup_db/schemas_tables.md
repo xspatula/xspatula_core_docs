@@ -120,7 +120,7 @@ None of these users are linked to any organisation ("organisation_id": 0).
 
 You can use the suggested users to test setting up the database. Then delete the whole database and define your own users and recreate the database.
 
-The `password` value for each user below is **not** the plain-text password anyone would type in — it's a bcrypt hash. Before editing this file with your own users, choose a plain-text password for each one and run it through `setup/hash_password.py` (see [hashing user passwords][setup_db_hash_passwords] on the Setup DB page), then paste the printed hash in place of the plain text. The values shown below (`$2b$12$...`) are illustrative placeholders, not real hashes.
+The `password` value is never a plain-text password. For the bootstrap user it is the placeholder `"{initial_user}"`: at setup the framework reads the password from `.netrc`, bcrypt-hashes it and fills the row (see [passwords for application users][setup_db_hash_passwords] on the Setup DB page, and [Setting up the initial user]({{ "/building/initial_user/" | relative_url }})). Any additional seeded user needs a bcrypt hash from `setup/hash_password.py`. The values shown below (`$2b$12$...`) are illustrative placeholders, not real hashes.
 
 ```
 {
@@ -239,7 +239,7 @@ For the full column-level reference of every `process` schema table, and how eac
 
 [install_anaconda]: https://www.anaconda.com/docs/getting-started/anaconda/install/overview
 
-[setup_db_hash_passwords]: ../#hashing-user-passwords
+[setup_db_hash_passwords]: ../#passwords-for-application-users
 
 [define_process_tables]: ../../setup_processes/define_process/#process-schema-tables
 
