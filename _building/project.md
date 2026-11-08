@@ -71,6 +71,6 @@ That's the entire renaming edit inside `process.py` itself. Nothing else in `Run
 | Every notebook calling `Run_process` | Each one imports from the old module name — see [Editing the notebooks][building_notebooks] |
 | Scheme file `project_path` | Just a directory path — no change required unless you also want to rename the directory |
 
-[scheme_file]: /framework/scheme_file/
-[building_notebooks]: /building/notebooks/
-[building_processes]: /building/processes/
+[scheme_file]: {{ "/framework/scheme_file/" | relative_url }}
+[building_notebooks]: {{ "/building/notebooks/" | relative_url }}
+[building_processes]: {{ "/building/processes/" | relative_url }}

@@ -38,5 +38,5 @@ The three `%s` placeholders are filled with the row's `first_name` (falling back
 
 This is stated plainly in the email itself because it's a real limitation: there is currently no way for a user to change or recover their own password. It's a deliberate scope decision for workshop-scale use, not an oversight — if a user loses their password, the admin has to reset it by hand (see [Bootstrap user][setup_community_bootstrap_user] for the same `hash_password.py` + `UPDATE community.user` mechanism used to seed the first account, which also works here). Otherwise, the generated password is permanent.
 
-[setup_community_register_notebook]: /setup_community/register_notebook/
-[setup_community_bootstrap_user]: /setup_community/bootstrap_user/
+[setup_community_register_notebook]: {{ "/setup_community/register_notebook/" | relative_url }}
+[setup_community_bootstrap_user]: {{ "/setup_community/bootstrap_user/" | relative_url }}

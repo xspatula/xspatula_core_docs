@@ -165,6 +165,6 @@ If this handler needs project-specific SQL beyond the generic framework helpers,
 
 Three things, matching the three items above: one JSON registration file, one pilot-file line, and one Python module — plus the one-line edit to your existing `process.py`. See [Postgres — summary of edits][building_postgres] for the consolidated list alongside the database-extension pattern from the previous page.
 
-[setup_processes_define]: /setup_processes/define_process/
-[building_database]: /building/database/
-[building_postgres]: /building/postgres/
+[setup_processes_define]: {{ "/setup_processes/define_process/" | relative_url }}
+[building_database]: {{ "/building/database/" | relative_url }}
+[building_postgres]: {{ "/building/postgres/" | relative_url }}

@@ -44,7 +44,7 @@ A real project scales up from here — every notebook you add that drives a proc
 
 If you start a new notebook by copying one from another project (including the shipped examples, whose own markdown cells and comments haven't all been fully generalized), check more than just the import line — leftover text elsewhere in the notebook (markdown explanations, code comments) may still reference the project it was copied from. Only the import line actually affects behavior, but stale prose is confusing to come back to later.
 
-[building_project]: /building/
-[user_data]: /user_data/
-[single_step_insert]: /user_data/single_step_insert/
-[setup_community]: /setup_community/
+[building_project]: {{ "/building/" | relative_url }}
+[user_data]: {{ "/user_data/" | relative_url }}
+[single_step_insert]: {{ "/user_data/single_step_insert/" | relative_url }}
+[setup_community]: {{ "/setup_community/" | relative_url }}

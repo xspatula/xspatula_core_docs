@@ -30,10 +30,10 @@ The generic pipeline (`translate_tabular_data` → `manage_organisation`/`manage
 
 Every column both spreadsheets need, the exact notebook steps, the `..._id__..._name` lookup-by-name convention, and troubleshooting a stale translate step are all documented in full in [Excel intake][setup_community_excel_intake] and [Register notebook][setup_community_register_notebook].
 
-[building_initial_user]: /building/initial_user/
-[building_smtp]: /building/smtp/
-[building_notebooks]: /building/notebooks/
-[setup_community]: /setup_community/
-[setup_community_excel_intake]: /setup_community/excel_intake/
-[setup_community_register_notebook]: /setup_community/register_notebook/
-[setup_processes_define]: /setup_processes/define_process/
+[building_initial_user]: {{ "/building/initial_user/" | relative_url }}
+[building_smtp]: {{ "/building/smtp/" | relative_url }}
+[building_notebooks]: {{ "/building/notebooks/" | relative_url }}
+[setup_community]: {{ "/setup_community/" | relative_url }}
+[setup_community_excel_intake]: {{ "/setup_community/excel_intake/" | relative_url }}
+[setup_community_register_notebook]: {{ "/setup_community/register_notebook/" | relative_url }}
+[setup_processes_define]: {{ "/setup_processes/define_process/" | relative_url }}

@@ -32,7 +32,7 @@ The same four-level hierarchy used for database setup applies here:
 
 ```
 .
-├── scheme_xspatula_local_use.json   # scheme file — project path + user credentials
+├── scheme_local_use.json   # scheme file — project path + user_netrc_id
 └── xspatula/
     ├── job_setup_processes.json     # job file — points to job folder, sub-folder and pilot file
     └── setup_processes/
@@ -51,7 +51,7 @@ The same four-level hierarchy used for database setup applies here:
 The notebook has the same block structure as all Xspatula notebooks. With code block 1 importing the required python packages and modules, and code block 2 setting the scheme file:
 
 ```python
-scheme_file = './zzz/scheme_xspatula_local_use.json'
+scheme_file = './zzz/scheme_local_use.json'
 ```
 
 Code block 3 loads the job file and runs the processes:
@@ -85,7 +85,7 @@ For details on defining your own processes, see [Define and register a process][
 
 | File | Purpose |
 |---|---|
-| `scheme_xspatula_local_use.json` | Scheme file for process registration; defines project path and a category-5 user login — no superuser credentials |
+| `scheme_local_use.json` | Scheme file for process registration; defines project path and a category-5 user's `user_netrc_id` — no passwords, no superuser credentials |
 | `job_setup_processes.json` | Job file; points to the `setup_processes` job folder, `json` sub-folder and `setup_processes.txt` pilot file |
 | `setup_processes.txt` | Pilot file; lists the JSON process files to run in order |
 
@@ -93,6 +93,6 @@ For details on defining your own processes, see [Define and register a process][
 
 [dump_restore]: ../setup_db/dump_restore/
 
-[scheme_file]: /setup_processes/scheme_file/
+[scheme_file]: {{ "/setup_processes/scheme_file/" | relative_url }}
 
-[define_process]: /setup_processes/define_process/
+[define_process]: {{ "/setup_processes/define_process/" | relative_url }}

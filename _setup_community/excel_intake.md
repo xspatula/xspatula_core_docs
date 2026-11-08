@@ -52,5 +52,5 @@ project_example/user_management/user/excel/
 
 These directories are **not** excluded by the framework's own `.gitignore` — unlike the database and SMTP credential files, which are. A filled-in sheet contains real people's personal data, which has no business being committed to a repository, so add `project_example/user_management/*/excel/` (or the equivalent path for your own project) to your project's own `.gitignore` before putting real data in these spreadsheets. A blank spreadsheet gets created by hand the first time, or copied from an existing project once one exists.
 
-[user_data]: /user_data/
-[setup_community_welcome_email]: /setup_community/welcome_email/
+[user_data]: {{ "/user_data/" | relative_url }}
+[setup_community_welcome_email]: {{ "/setup_community/welcome_email/" | relative_url }}

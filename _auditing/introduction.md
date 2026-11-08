@@ -102,7 +102,7 @@ hand-edited files** — the only thing you ever hand-edit is a table's own `"aud
 
 See [Auditing queries][auditing_queries] for how to actually read this log day-to-day, and [Setup DB][setup_db] for how the schemas and tables it audits are created in the first place. The `process` schema's 9 tables are audited in full by default — see the [process schema tables reference][define_process_tables] in Setup processes if you want the column-level detail of what's being logged there.
 
-[auditing_setup]: /auditing/setup/
-[auditing_queries]: /auditing/queries/
-[setup_db]: /setup_db/
-[define_process_tables]: /setup_processes/define_process/#process-schema-tables
+[auditing_setup]: {{ "/auditing/setup/" | relative_url }}
+[auditing_queries]: {{ "/auditing/queries/" | relative_url }}
+[setup_db]: {{ "/setup_db/" | relative_url }}
+[define_process_tables]: {{ "/setup_processes/define_process/#process-schema-tables" | relative_url }}

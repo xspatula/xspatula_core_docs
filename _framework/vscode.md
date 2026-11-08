@@ -20,10 +20,10 @@ To learn about and download VSCode, visit the [VSCode official page][vscode_home
 
 [notebook]: ../notebook/
 
-[postgres]: ../setup_db/postgres/
+[postgres]: ../../setup_db/postgres/
 
 [scheme_file]: ../scheme_file/
 
-[anaconda]: ../setup_db/anaconda/
+[anaconda]: ../../setup_db/anaconda/
 
 [vscode_home]: https://code.visualstudio.com

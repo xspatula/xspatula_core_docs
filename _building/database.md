@@ -82,8 +82,8 @@ From then on, call your helpers through that attribute, passing the session expl
 
 See [Postgres — summary of edits][building_postgres] for the complete list of files this pattern touches, alongside the process-registration pattern in [Adding a new process][building_processes].
 
-[setup_db]: /setup_db/
-[schemas_tables]: /setup_db/schemas_tables/
-[building_auditing]: /building/auditing/
-[building_processes]: /building/processes/
-[building_postgres]: /building/postgres/
+[setup_db]: {{ "/setup_db/" | relative_url }}
+[schemas_tables]: {{ "/setup_db/schemas_tables/" | relative_url }}
+[building_auditing]: {{ "/building/auditing/" | relative_url }}
+[building_processes]: {{ "/building/processes/" | relative_url }}
+[building_postgres]: {{ "/building/postgres/" | relative_url }}

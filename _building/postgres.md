@@ -24,5 +24,5 @@ last_modified_at: 2026-08-24
 
 Two patterns run through this whole table, both covered in detail on the pages linked above: nothing here is automatic beyond one database lookup (a process name resolves to its `root_process` at runtime) — every dispatch step past that is a plain, hand-written `if`/`elif` chain; and the framework's own core (`src/postgres/`, `src/lib/`) is never edited by any of this — every addition lives in your project's own files, alongside the framework rather than inside it.
 
-[building_database]: /building/database/
-[building_processes]: /building/processes/
+[building_database]: {{ "/building/database/" | relative_url }}
+[building_processes]: {{ "/building/processes/" | relative_url }}

@@ -62,7 +62,7 @@ from src_setup.lib_setup import Initiate_database
 The second code block loads the [scheme][scheme_file] file, defining project path, login credentials and  default settings for execute, delete, overwrite and verbosity.
 
 ```
-scheme_file = './zzz/scheme_xspatula_local_setup.json'
+scheme_file = './zzz/scheme_local_setup.json'
 ```
 
 The default path for the _scheme_ file for setting up the database is in the (sleepy) directory `zzz` under the directory where the notebooks themselves are available. You can move the _scheme_ file to any other path you want, and either give a relative (vis-a-vis the notebook) or absolute path that you have access to.
@@ -99,7 +99,7 @@ See the documents on [job file][job_file], [pilot file][pilot_file] and [process
 
 | File | Purpose |
 |---|---|
-| `scheme_xspatula_local_setup.json` | Scheme file; defines project path, postgres superuser credentials, pg_users and default process settings |
+| `scheme_local_setup.json` | Scheme file; defines project path, postgres superuser and pg_users (as netrc ids) and default process settings |
 | `job_setup_processes.json` | Job file; connects to the processes to run |
 
 [vscode]: https://code.visualstudio.com

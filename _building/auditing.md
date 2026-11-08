@@ -35,6 +35,6 @@ Nothing extra to run — `setup_db.ipynb`'s existing two cells handle it:
 
 Full detail — every column of `audit.logged_actions`, the self-audit gotcha, read-access grants, and copy-paste SQL for actually querying the log — is in [Auditing][auditing_introduction] and [Auditing queries][auditing_queries].
 
-[auditing_introduction]: /auditing/
-[auditing_queries]: /auditing/queries/
-[building_database]: /building/database/
+[auditing_introduction]: {{ "/auditing/" | relative_url }}
+[auditing_queries]: {{ "/auditing/queries/" | relative_url }}
+[building_database]: {{ "/building/database/" | relative_url }}

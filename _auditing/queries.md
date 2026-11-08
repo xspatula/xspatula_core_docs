@@ -108,6 +108,6 @@ GROUP BY 1, 2
 ORDER BY 1, 2;
 ```
 
-[auditing_introduction]: /auditing/
-[auditing_setup]: /auditing/setup/
+[auditing_introduction]: {{ "/auditing/" | relative_url }}
+[auditing_setup]: {{ "/auditing/setup/" | relative_url }}
 [dbeaver]: https://dbeaver.io

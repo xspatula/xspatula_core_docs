@@ -49,5 +49,5 @@ Send_email('you@yourdomain.example', 'Test', 'This is a test email.')
 
 If that returns `True` and the message arrives, the registration notebook's password emails (see [Welcome email][setup_community_welcome_email]) will work the same way.
 
-[setup_community_bootstrap_user]: /setup_community/bootstrap_user/
-[setup_community_welcome_email]: /setup_community/welcome_email/
+[setup_community_bootstrap_user]: {{ "/setup_community/bootstrap_user/" | relative_url }}
+[setup_community_welcome_email]: {{ "/setup_community/welcome_email/" | relative_url }}

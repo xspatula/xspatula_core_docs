@@ -256,7 +256,7 @@ _Funded by the European Union. The views expressed are those of the authors and 
 
 [schemas_tables_default_processes]: ../setup_db/schemas_tables/#default-processes
 
-[framework_synopsis_user]: ../setup_db/schemas_tables/#default-human-users
+[framework_synopsis_user]: ../setup_db/#default-human-users
 
 [framework_table_insert]: ../setup_db/schemas_tables/#table-insert
 

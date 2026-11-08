@@ -32,8 +32,8 @@ Because this runs through the normal login flow (not the raw-superuser `setup_db
 
 `translate_tabular_data` runs with `overwrite: false` by default, so re-running step 1 or 3 after the target JSON file already exists is a no-op — it won't pick up corrections made to the spreadsheet. If a spreadsheet was corrected and needs re-translating, delete the stale `manage_process/*.json` file first, then re-run that translate cell. 
 
-[setup_community_excel_intake]: /setup_community/excel_intake/
-[setup_community_smtp_email]: /setup_community/smtp_email/
-[setup_community_welcome_email]: /setup_community/welcome_email/
-[user_data]: /user_data/
-[auditing_introduction]: /auditing/
+[setup_community_excel_intake]: {{ "/setup_community/excel_intake/" | relative_url }}
+[setup_community_smtp_email]: {{ "/setup_community/smtp_email/" | relative_url }}
+[setup_community_welcome_email]: {{ "/setup_community/welcome_email/" | relative_url }}
+[user_data]: {{ "/user_data/" | relative_url }}
+[auditing_introduction]: {{ "/auditing/" | relative_url }}

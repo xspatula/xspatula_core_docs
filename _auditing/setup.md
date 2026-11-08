@@ -125,7 +125,7 @@ directory, passing your own scheme file explicitly (its own built-in default poi
 that won't exist in a fresh project, so don't rely on running it with no arguments):
 
 ```
-python scripts/verify_audit_system.py zzz/scheme_xspatula_local_setup.json
+python scripts/verify_audit_system.py zzz/scheme_local_setup.json
 ```
 
 ## Input files
@@ -139,4 +139,4 @@ python scripts/verify_audit_system.py zzz/scheme_xspatula_local_setup.json
 | generated pilot file (cell 2's manifest) | Generated; lists every audit config file cell 2 should apply — do not hand-edit |
 | `setup/scripts/verify_audit_system.py` | Optional dry-run check; confirms the assembled config matches every table's `"audit"` key without touching the database |
 
-[auditing_introduction]: /auditing/
+[auditing_introduction]: {{ "/auditing/" | relative_url }}

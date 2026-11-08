@@ -44,6 +44,6 @@ This returns `True` and the message arrives if everything's configured correctly
 
 This is the same credential file and the same two functions (`Get_smtp_env_var`, `Send_email`) documented in full on [SMTP email][setup_community_smtp_email], including what actually reads the file and how failures are reported — worth a read if you want to understand what's happening under the hood rather than just copy-paste the credential file.
 
-[building_add_users]: /building/add_users/
-[setup_community_smtp_email]: /setup_community/smtp_email/
-[setup_community_welcome_email]: /setup_community/welcome_email/
+[building_add_users]: {{ "/building/add_users/" | relative_url }}
+[setup_community_smtp_email]: {{ "/setup_community/smtp_email/" | relative_url }}
+[setup_community_welcome_email]: {{ "/setup_community/welcome_email/" | relative_url }}
